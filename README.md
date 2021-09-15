@@ -3,4 +3,4 @@
 
 
 ## 사용 기술
-> React, Redux, Redux Saga, emotion.js Antd
+> React, TypeScript Redux, Redux Saga, emotion.js AntD

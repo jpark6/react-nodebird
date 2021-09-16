@@ -1,11 +1,6 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
-import styled from '@emotion/styled';
-
-const ButtonWrapper = styled.div`
-  margin-top: 10px;
-`;
 
 interface LoginFormProps {
   setIsLoggedIn: (login:boolean)=>void;
@@ -15,7 +10,13 @@ export default function LoginForm({ setIsLoggedIn }: LoginFormProps): JSX.Elemen
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const formStyle = useMemo(()=>({padding: 10}), []);
+  const btnWrapperStyle = useMemo(()=>({
+    marginTop: '10px',
+  }), []);
+
+  const formStyle = useMemo(()=>({
+    padding: '10px',
+  }), []);
 
   const onChangeId = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
@@ -52,14 +53,14 @@ export default function LoginForm({ setIsLoggedIn }: LoginFormProps): JSX.Elemen
           required
         />
       </div>
-      <ButtonWrapper>
+      <div style={ btnWrapperStyle }>
         <Button type="primary" htmlType="submit" loading={false}>
           로그인
         </Button>
         <Link href="/signup">
           <Button>회원가입</Button>
         </Link>
-      </ButtonWrapper>
+      </div>
     </Form>
   );
 }

@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../reducers';
 
-interface LoginFormProps {
-  setIsLoggedIn: (login:boolean)=>void;
-}
+export default function LoginForm(): JSX.Element {
+  const dispatch = useDispatch();
 
-export default function LoginForm({ setIsLoggedIn }: LoginFormProps): JSX.Element {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,7 +28,7 @@ export default function LoginForm({ setIsLoggedIn }: LoginFormProps): JSX.Elemen
 
   const onSubmitForm = useCallback(() => {
     console.log(id, ':', password);
-    setIsLoggedIn(true);
+    dispatch(loginAction({id, password}));
 
   }, []);
   return (

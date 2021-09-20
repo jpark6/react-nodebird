@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Row, Col } from 'antd';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
@@ -9,13 +10,16 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children }: AppLayoutProps): JSX.Element {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   return (
     <div>
       <TopMenu />
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          { isLoggedIn ? <UserProfile  setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn} /> }
+          { isLoggedIn ? <UserProfile /> : <LoginForm /> }
         </Col>
         <Col xs={24} md={12}>
           {children}

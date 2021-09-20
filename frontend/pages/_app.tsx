@@ -2,8 +2,9 @@ import React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
+import wrapper from '../store/configureStore';
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+const App = ({ Component, pageProps }: AppProps): JSX.Element  =>{
   return (
     <>
       <Head>
@@ -12,4 +13,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <Component {...pageProps} />
     </>
   );
-}
+};
+
+export default wrapper.withRedux(App);

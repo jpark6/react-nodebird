@@ -13,8 +13,12 @@
     "@emotion/styled": "^11.3.0",
     "antd": "^4.16.13",
     "next": "^11.1.2",
+    "next-redux-wrapper": "^7.0.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.5",
+    "redux": "^4.1.1",
+    "redux-devtools-extension": "^2.13.9",
     "sass": "^1.41.0"
   },
   "devDependencies": {

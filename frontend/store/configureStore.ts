@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import reducer from '../reducers';
 
 const configureStore = () => {
+  const middlewares = [];
   const enhancer = process.env.NODE_ENV === 'production'
     ? compose(applyMiddleware())
     : compose(composeWithDevTools(applyMiddleware()));

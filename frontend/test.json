@@ -1,0 +1,2 @@
+{ id: number; User: { id: number; nickname: string; }; Images: never[]; Comments: never[]; } | { id: number; User: { id: number; nickname: string; }; content: string; Images: { src: string; }[]; Comments: { User: { nickname: string; }; content: string; }[]; }'
+{ id: number; User: { id: number; nickname: string; }; content: string; Images: { src: string; }[]; Comments: { User: { nickname: string; }; content: string; }[]; }

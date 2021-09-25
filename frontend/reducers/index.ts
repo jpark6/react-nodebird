@@ -3,9 +3,6 @@ import { HYDRATE } from 'next-redux-wrapper';
 import user from './user';
 import post from './post';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const rootReducer = combineReducers({
   index: (state = {}, action) => {
     if(action.type === HYDRATE) {
@@ -21,4 +18,6 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
+
+export type RootState = ReturnType<typeof rootReducer>;
 

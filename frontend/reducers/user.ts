@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/prefer-default-export
 export const initialState = {
   isLoggedIn: false,
-  user: {},
+  me : {},
   signUpData: {},
   loginData: {},
 };
@@ -27,13 +27,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: action.data,
+        me: action.data,
       };
     case 'LOGOUT':
       return {
         ...state,
         isLoggedIn: false,
-        user: null,
+        me: null,
       };
     default:
       return state;

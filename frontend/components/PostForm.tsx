@@ -13,13 +13,13 @@ export default function PostForm(): JSX.Element {
   // @ts-ignore
   const { imagePaths } = useSelector((state) => state.post);
   const dispatch = useDispatch();
-  const imageInput = useRef();
+  const imageInput = useRef<HTMLInputElement>(null);
 
-  const onClickImageUpload = useCallback(() => {
+  const onClickImageUpload = useCallback(() =>
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return imageInput.current.click();
-  }, [imageInput.current]);
+     imageInput.current.click()
+  , [imageInput.current]);
 
   const formStyle = useMemo(() => ({ margin: '10px 0 20px', }), []);
 

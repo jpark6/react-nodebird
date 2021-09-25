@@ -1,5 +1,24 @@
 
-export const initialState = {
+interface PostProps {
+  mainPosts: {
+    id: number;
+    User: {
+      id: number;
+      nickname: string;
+    };
+    content: string;
+    Images?: {src: string}[];
+    Comments?: {
+      User: {
+        nickname: string;
+      };
+      content: string;
+    }[];
+  }[];
+  postAdded?: boolean;
+}
+
+export const initialState: PostProps = {
   mainPosts: [{
     id:1,
     User: {
@@ -34,14 +53,12 @@ const dummyPost = {
     id: 1,
     nickname: 'jpark',
   },
+  content: 'HELLO',
   Images: [],
   Comments: [],
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: {type: string}) => {
   switch (action.type) {
     case ADD_POST:
       return {
@@ -55,3 +72,5 @@ const reducer = (state = initialState, action) => {
 };
 
 export default reducer;
+
+export type PostState = ReturnType<typeof reducer>;

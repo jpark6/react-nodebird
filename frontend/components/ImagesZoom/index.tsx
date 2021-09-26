@@ -5,11 +5,18 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import styled from '@emotion/styled';
+import { Global, css } from '@emotion/react';
 
 interface ImagesZoomProps {
   images: {src: string}[];
   onClose: () => void;
 }
+
+const GlobalStyle = css`
+  .slick-slide {
+    display: inline-block !important;
+  }
+`;
 
 const SlickWrapper = styled.div`
   height: calc(100%  - 44px);
@@ -85,8 +92,8 @@ export default function ImagesZoom({ images, onClose }: ImagesZoomProps): JSX.El
 
   const slickSettings = useMemo(() => ({
     initialSlide: 0,
-    dots: true,
-    afterChange: (slide: React.SetStateAction<number>) => setCurrentSlide(slide),
+    dots: false,
+    beforeChange: (slide: React.SetStateAction<number>) => setCurrentSlide(slide),
     infinite: true,
     arrows: true,
     slidesToShow: 1,
@@ -94,6 +101,7 @@ export default function ImagesZoom({ images, onClose }: ImagesZoomProps): JSX.El
   }), []);
   return (
     <Overlay>
+      <Global styles={GlobalStyle} />
       <header>
         <h1>상세이미지</h1>
         <Button onClick={onClose}>&times;</Button>
@@ -108,6 +116,13 @@ export default function ImagesZoom({ images, onClose }: ImagesZoomProps): JSX.El
               </ImageWrapper>
             ))}
           </Slick>
+          <Indicator>
+            <div>
+              {currentSlide + 1}
+              &nbsp;/&nbsp;
+              {images.length}
+            </div>
+          </Indicator>
         </SlickWrapper>
       </div>
     </Overlay>

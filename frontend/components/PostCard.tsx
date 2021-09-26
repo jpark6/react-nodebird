@@ -38,7 +38,7 @@ export default function PostCard({ post }: PostProps): JSX.Element {
   return (
     <div>
       <Card
-        cover={post.Images && <PostImages images={post.Images}/>}
+        cover={post.Images && post.Images.length > 0 && <PostImages images={post.Images}/>}
         actions={[
           <RetweetOutlined key="retweet"/>,
             liked

@@ -1,5 +1,5 @@
 
-interface PostProps {
+interface MainPostProps {
   mainPosts: {
     id: number;
     User: {
@@ -18,7 +18,7 @@ interface PostProps {
   postAdded?: boolean;
 }
 
-export const initialState: PostProps = {
+export const initialState: MainPostProps = {
   mainPosts: [{
     id:1,
     User: {
@@ -33,12 +33,20 @@ export const initialState: PostProps = {
     }, {
       src: 'https://media.vlpt.us/images/taeg92/post/a0e7e32b-49ee-4f17-ad61-a89f481521e3/Typescript.jpg'
     }],
-    Comments: [{
-       User: {
-         nickname: 'damian',
-       },
-      content: 'Hello World;'
-    }],
+    Comments: [
+      {
+        User: {
+          nickname: 'damian',
+        },
+        content: 'Hello World;'
+      },
+      {
+         User: {
+           nickname: 'TESLA',
+         },
+        content: 'Mode3'
+      },
+    ],
   }],
 };
 
@@ -73,4 +81,4 @@ const reducer = (state = initialState, action: {type: string}) => {
 
 export default reducer;
 
-export type PostState = ReturnType<typeof reducer>;
+export type MainPostState = ReturnType<typeof reducer>;

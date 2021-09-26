@@ -1,17 +1,13 @@
 import React, { ChangeEvent, RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import { Button, Form, Input } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addPost } from '../reducers/post';
 
 export default function PostForm(): JSX.Element {
   const [text, setText] = useState('');
   const onChangeText = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(e.target.value);
     setText(e.target.value);
-  }, []);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const { imagePaths } = useSelector((state) => state.post);
+  }, [text]);
   const dispatch = useDispatch();
   const imageInput = useRef<HTMLInputElement>(null);
 
@@ -54,13 +50,15 @@ export default function PostForm(): JSX.Element {
         </Button>
       </div>
       <div>
+{/*
         {imagePaths && imagePaths.map((v: any) => (
           <div key={v} style={{ display: 'inline-block' }}>
             <img src={v} alt="" style={{ width: '200px' }} />
             <Button>제거</Button>
           </div>
         ))}
+*/}
       </div>
     </Form>
   );
-};
+}

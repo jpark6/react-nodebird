@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { Avatar, Button, Card, Popover } from 'antd';
+import { Avatar, Button, Card, List, Popover, Comment } from 'antd';
 import { EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import ButtonGroup from 'antd/lib/button/button-group';
 import PostImages from './PostImages';
 import { RootState } from '../reducers';
-import ButtonGroup from 'antd/lib/button/button-group';
+import CommentForm from './CommentForm';
 
 interface PostProps {
   post: {
@@ -23,7 +24,7 @@ interface PostProps {
     }[];
   }
 }
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
 export default function PostCard({ post }: PostProps): JSX.Element {
   const [liked, setLiked] = useState(false);
   const onToggleLiked = useCallback(()=> {
@@ -72,7 +73,21 @@ export default function PostCard({ post }: PostProps): JSX.Element {
       </Card>
       { commentFormOpend && (
         <div>
-          댓글 부
+          <CommentForm post={post} />
+          <List
+            header={`${post.Comments?.length}개 의 댓글`}
+            itemLayout="horizontal"
+            dataSource={post.Comments}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  author={item.User.nickname}
+                  avatar={<Avatar>{item.User.nickname[0].toUpperCase()}</Avatar>}
+                  content={item.content}
+                />
+              </li>
+            )}
+          />
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
+import ImagesZoom from './ImagesZoom';
 
 interface PostImagesProps {
   images: {src: string}[];
@@ -13,14 +14,20 @@ export default function PostCard({ images } : PostImagesProps): JSX.Element {
     verticalAlign: 'middle',
     cursor: 'pointer',
   }), []);
+
   const onZoom = useCallback (() => {
     setShowImageZoom(true);
+  }, []);
+
+  const onClose = useCallback(() => {
+    setShowImageZoom(false);
   }, []);
 
   const drawImages = useCallback(() => {
     switch(images.length) {
       case 1:
         return (
+          <>
             <img
               role="presentation"
               src={images[0].src}
@@ -28,6 +35,7 @@ export default function PostCard({ images } : PostImagesProps): JSX.Element {
               onClick={onZoom}
               style={{ width: '100%' }}
             />
+          </>
         );
       case 2:
         return (
@@ -75,6 +83,7 @@ export default function PostCard({ images } : PostImagesProps): JSX.Element {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {drawImages()}
+      {showImageZoom && <ImagesZoom images={images} onClose={onClose} />}
     </div>
   );
 }

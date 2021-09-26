@@ -28,11 +28,11 @@ export const initialState: MainPostProps = {
     content: 'First Post #Hash #express',
     Images: [{
       src:'https://acaroom.net/sites/default/files/styles/blog_featured_adaptive/public/images/blogs/reactintroduction.png',
-    }, /* {
+    }, {
       src: 'https://media.vlpt.us/images/dongha1992/post/d31e5f57-14c8-495e-867b-b5b6cadee525/next.js.png'
     }, {
       src: 'https://media.vlpt.us/images/taeg92/post/a0e7e32b-49ee-4f17-ad61-a89f481521e3/Typescript.jpg'
-    }*/ ],
+    }],
     Comments: [
       {
         User: {

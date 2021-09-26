@@ -6,6 +6,7 @@ import ButtonGroup from 'antd/lib/button/button-group';
 import PostImages from './PostImages';
 import { RootState } from '../reducers';
 import CommentForm from './CommentForm';
+import PostCardContent from './PostCardContent';
 
 interface PostProps {
   post: {
@@ -68,7 +69,7 @@ export default function PostCard({ post }: PostProps): JSX.Element {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0].toUpperCase()}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={ <PostCardContent postData={post.content} />}
         />
       </Card>
       { commentFormOpend && (

@@ -1,17 +1,31 @@
 import { createWrapper } from 'next-redux-wrapper';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import createSagaMiddleware from 'redux-saga';
+
 import reducer from '../reducers';
+import rootSaga from '../sagas';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
+  console.log('action: ', action);
+  return next(action);
+};
 
 const configureStore = () => {
-  const middlewares = [];
+  const sagaMiddleware = createSagaMiddleware();
+  const middlewares = [loggerMiddleware, sagaMiddleware];
   const enhancer = process.env.NODE_ENV === 'production'
-    ? compose(applyMiddleware())
-    : compose(composeWithDevTools(applyMiddleware()));
+    ? compose(applyMiddleware(...middlewares))
+    : compose(composeWithDevTools(applyMiddleware(...middlewares)));
+
+  const store = createStore(reducer, enhancer);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const store = createStore(reducer, enhancer);
+  store.sagaTask = sagaMiddleware.run(rootSaga);
 
   return store;
 };

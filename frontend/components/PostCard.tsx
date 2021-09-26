@@ -35,6 +35,8 @@ export default function PostCard({ post }: PostProps): JSX.Element {
   const onToggleCommentFormOpened = useCallback(() => {
     setCommentFormOpend(prev => !prev);
   }, [commentFormOpend]);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const id = useSelector((state: RootState) => state.user.me?.id);
   return (
     <div>

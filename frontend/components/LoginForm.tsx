@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
-import { loginAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction } from '../reducers/user';
 import userInput from '../hooks/userInput';
+import { RootState } from '../reducers';
 
 export default function LoginForm(): JSX.Element {
   const dispatch = useDispatch();
-
+  const { isLoggingIn } = useSelector((state: RootState) => state.user);
   const [id, onChangeId] = userInput('');
   const [password, onChangePassword] = userInput('');
 
@@ -21,7 +22,7 @@ export default function LoginForm(): JSX.Element {
 
   const onSubmitForm = useCallback(() => {
     console.log(id, ':', password);
-    dispatch(loginAction({ id, password }));
+    dispatch(loginRequestAction({ id, password }));
 
   }, [id, password]);
   return (
@@ -47,7 +48,7 @@ export default function LoginForm(): JSX.Element {
         />
       </div>
       <div style={ btnWrapperStyle }>
-        <Button type="primary" htmlType="submit" loading={false}>
+        <Button type="primary" htmlType="submit" loading={isLoggingIn}>
           로그인
         </Button>
         <Link href="/signup">

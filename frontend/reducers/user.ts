@@ -1,39 +1,63 @@
 // eslint-disable-next-line import/prefer-default-export
 export const initialState = {
+  isLoggingIn: false,
   isLoggedIn: false,
+  isLoggingOut: false,
   me : {},
   signUpData: {},
   loginData: {},
 };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const loginRequestAction = (data) => ({
+  type: 'LOG_IN_REQUEST',
+  data,
+});
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const loginAction = (data) => ({
-  type: 'LOGIN',
-  data
+export const logoutRequestAction = () => ({
+  type: 'LOG_OUT_REQUEST',
 });
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const logoutAction = () => ({
-  type: 'LOGOUT',
-});
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: {data: Record<string, unknown>, type: string}) => {
   switch (action.type) {
-    case 'LOGIN':
+    case 'LOG_IN_REQUEST':
       return {
         ...state,
-        isLoggedIn: true,
-        me: action.data,
+        isLoggingIn: true,
       };
-    case 'LOGOUT':
+    case 'LOG_IN_SUCCESS':
       return {
         ...state,
+        isLoggingIn: false,
+        isLoggedIn: true,
+        me: { ...action.data, nickname: 'jpark' },
+      };
+    case 'LOG_IN_FAILURE':
+      return {
+        ...state,
+        isLoggingIn: false,
+        isLoggedIn: false,
+      };
+    case 'LOG_OUT_REQUEST':
+      return {
+        ...state,
+        isLoggingOut: true,
+        me: null,
+      };
+    case 'LOG_OUT_SUCCESS':
+      return {
+        ...state,
+        isLoggingOut: false,
         isLoggedIn: false,
         me: null,
+      };
+    case 'LOG_OUT_FAILURE':
+      return {
+        ...state,
+        isLoggingOut: false,
       };
     default:
       return state;

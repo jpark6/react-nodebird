@@ -1,13 +1,19 @@
 import React, { useCallback } from 'react';
 import { Avatar, Button, Card } from 'antd';
-import { useDispatch } from 'react-redux';
-import { logoutAction } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutRequestAction } from '../reducers/user';
+import { RootState } from '../reducers';
 
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default function UserProfile(): JSX.Element {
   const dispatch = useDispatch();
+  const { me } = useSelector((state: RootState) => state.user);
+  const { isLoggingOut } = useSelector((state: RootState) => state.user);
+
   const onLogout = useCallback(() => {
-    dispatch(logoutAction());
+    dispatch(logoutRequestAction());
   }, []);
   return (
     <Card
@@ -18,10 +24,10 @@ export default function UserProfile(): JSX.Element {
       ]}
     >
       <Card.Meta
-        avatar={<Avatar>JP</Avatar>}
-        title="bspark"
+        avatar={<Avatar>{ me?.nickname[0] }</Avatar>}
+        title={ me?.nickname }
       />
-      <Button onClick={onLogout}>로그아웃</Button>
+      <Button onClick={onLogout} loading={isLoggingOut}>로그아웃</Button>
     </Card>
   );
 }

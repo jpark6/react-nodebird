@@ -3,27 +3,16 @@ import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import AppLayout from '../components/AppLayout';
+import userInput from '../hooks/userInput';
 
 export default function Signup(): JSX.Element {
-  const [id, setId] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, onChangeId] = userInput('');
+  const [nickname, onChangeNickname] = userInput('');
+  const [password, onChangePassword] = userInput('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [term, setTerm] = useState(false);
   const [termError, setTermError] = useState(false);
-
-  const onChangeId  = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
-  }, [id]);
-
-  const onChangeNickname  = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  }, [nickname]);
-
-  const onChangePassword  = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, [password]);
 
   const onChangePasswordCheck = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const passwordCheckValue = e.target.value;

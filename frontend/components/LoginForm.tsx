@@ -3,12 +3,13 @@ import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../reducers/user';
+import userInput from '../hooks/userInput';
 
 export default function LoginForm(): JSX.Element {
   const dispatch = useDispatch();
 
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const [id, onChangeId] = userInput('');
+  const [password, onChangePassword] = userInput('');
 
   const btnWrapperStyle = useMemo(()=>({
     marginTop: '10px',
@@ -17,14 +18,6 @@ export default function LoginForm(): JSX.Element {
   const formStyle = useMemo(()=>({
     padding: '10px',
   }), []);
-
-  const onChangeId = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setId(e.target.value);
-  }, [id]);
-
-  const onChangePassword = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, [password]);
 
   const onSubmitForm = useCallback(() => {
     console.log(id, ':', password);

@@ -8,6 +8,7 @@ import useInput from '../hooks/useInput';
 export default function PostForm(): JSX.Element {
   const [text, onChangeText, setText] = useInput('');
 
+  const btnWrapperStyle = useMemo(() => ({marginTop: 5}),[]);
   const { imagePaths, addPostDone } = useSelector((state: RootState)=> state.post);
   useEffect(() => {
     if (addPostDone) {
@@ -43,7 +44,7 @@ export default function PostForm(): JSX.Element {
         placeholder="어떤 일이 있었나요?"
       />
 
-      <div>
+      <div style={btnWrapperStyle}>
         <input type="file" hidden multiple ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button

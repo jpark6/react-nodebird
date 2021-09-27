@@ -10,15 +10,14 @@ import { PostState } from '../reducers/post';
 export default function Index(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const { logInLoading } = useSelector((state: RootState) => state.user);
+  const { me } = useSelector((state: RootState) => state.user);
 
   const mainPosts: PostState[] = useSelector((state: RootState) => state.post.mainPosts);
-  console.log(mainPosts);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return (
     <AppLayout>
-      { logInLoading && <PostForm /> }
+      { me && <PostForm /> }
       { mainPosts.map((post) => (<PostCard  key={post.id} post={post} />))}
     </AppLayout>
   );

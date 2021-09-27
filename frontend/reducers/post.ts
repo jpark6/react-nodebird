@@ -1,5 +1,7 @@
+import shortId from 'shortid';
+
 export interface PostState {
-  id: number;
+  id: string;
   User: {
     id: number;
     nickname: string;
@@ -27,7 +29,7 @@ interface MainPostProps {
 
 export const initialState: MainPostProps = {
   mainPosts: [{
-    id:1,
+    id: shortId.generate(),
     User: {
       id: 1,
       nickname: 'jpark',
@@ -55,7 +57,7 @@ export const initialState: MainPostProps = {
       },
     ],
   },{
-    id:2,
+    id: shortId.generate(),
     User: {
       id: 1,
       nickname: 'tomcat',
@@ -63,11 +65,11 @@ export const initialState: MainPostProps = {
     content: '#cat #cuty #LionOnHouse',
     Images: [{
       src:'https://i.ytimg.com/vi/jHWKtQHXVJg/maxresdefault.jpg',
-    }, /*{
+    }, {
       src: 'https://i.ytimg.com/vi/2AzW2HxN5lE/maxresdefault.jpg'
     }, {
       src: 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F6082931ef598a85b055afe77%2Ftwo-month-old-Ragdoll-kitten-at-home%2F960x0.jpg%3FcropX1%3D0%26cropX2%3D3475%26cropY1%3D182%26cropY2%3D2137'
-    }*/],
+    }],
     Comments: [
       {
         User: {
@@ -87,6 +89,9 @@ export const initialState: MainPostProps = {
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
 };
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -107,18 +112,27 @@ export const addComment = (data: Record<string, unknown>) => ({
   data,
 });
 
-const dummyPost = {
-  id: 3,
+const dummyPost = (data: string): PostState => ({
+  id: shortId.generate(),
   User: {
     id: 1,
     nickname: 'jpark',
   },
-  content: 'HELLO',
+  content: data,
   Images: [],
   Comments: [],
-};
+});
 
-const reducer = (state = initialState, action: {type: string, error: Record<string,unknown>}) => {
+const dummyComment = (data) => ({
+  id: shortId.generate(),
+  User: {
+    id: 1,
+    nickname: 'jpark',
+  },
+  content: data,
+});
+
+const reducer = (state = initialState, action: {type: string, data:any, error: Record<string,unknown>}) => {
   switch (action.type) {
     case ADD_POST_REQUEST:
       return {
@@ -130,7 +144,7 @@ const reducer = (state = initialState, action: {type: string, error: Record<stri
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [dummyPost(action.data), ...state.mainPosts],
         addPostLoading: false,
         addPostDone: true,
       };
@@ -147,12 +161,19 @@ const reducer = (state = initialState, action: {type: string, error: Record<stri
         addCommentDone: false,
         addCommentError: null,
       };
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+      const post = { ...state.mainPosts[postIndex] };
+      post.Comments = [dummyComment(action.data.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = post;
       return {
         ...state,
+        mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
+    }
     case ADD_COMMENT_FAILURE:
       return {
         ...state,

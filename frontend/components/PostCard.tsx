@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Avatar, Button, Card, List, Popover, Comment } from 'antd';
 import { EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -38,9 +38,11 @@ export default function PostCard({ post }: PostProps): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const id = useSelector((state: RootState) => state.user.me?.id);
+
+  const postCardStyle = useMemo(() => ({ marginBottom: 10 }),[]);
   return (
     <div>
-      <Card
+      <Card style={postCardStyle}
         cover={post.Images && post.Images.length > 0 && <PostImages images={post.Images}/>}
         actions={[
           <RetweetOutlined key="retweet"/>,

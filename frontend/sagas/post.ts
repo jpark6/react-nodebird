@@ -1,17 +1,18 @@
 import { all, delay, fork, put, takeLatest } from 'redux-saga/effects';
 import {
-  ADD_COMMENT_FAILURE,
+  ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS
 } from '../reducers/post';
 
-function* addPost() {
+function* addPost(action: {data: string}) {
   try {
     yield delay(1000);
     yield put({
       type: ADD_POST_SUCCESS,
+      data: action.data,
     });
   } catch (err) {
     yield put({
@@ -21,11 +22,12 @@ function* addPost() {
   }
 }
 
-function* addComment() {
+function* addComment(action: {data: {content: string, postId: string, userId: string}}) {
   try {
     yield delay(1000);
     yield put({
       type: ADD_COMMENT_SUCCESS,
+      data: action.data
     });
   } catch (err) {
     yield put({
@@ -40,7 +42,7 @@ function* watchAddPost() {
 }
 
 function* watchAddComment() {
-  yield takeLatest(ADD_POST_REQUEST, addComment);
+  yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
 export default function* postSaga(): Generator {

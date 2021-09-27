@@ -12,14 +12,14 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const logInLoading = useSelector((state) => state.user.logInLoading);
 
   return (
     <div>
       <TopMenu />
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          { isLoggedIn ? <UserProfile /> : <LoginForm /> }
+          { logInLoading ? <UserProfile /> : <LoginForm /> }
         </Col>
         <Col xs={24} md={12}>
           {children}

@@ -1,28 +1,30 @@
-import { all, call, delay, fork, put, takeLatest } from 'redux-saga/effects';
-
-// function logInAPI() {
-//
-// }
+import { all, delay, fork, put, take, takeLatest } from 'redux-saga/effects';
+import {
+  LOG_IN_FAILURE,
+  LOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
+  LOG_OUT_REQUEST,
+  SIGN_UP_FAILURE,
+  SIGN_UP_REQUEST, SIGN_UP_SUCCESS
+} from '../reducers/user';
 
 function* logIn(action: { data: any; }) {
   try {
-    console.log('SAGA LOGIN');
     yield delay(1000);
     yield put({
-      type: 'LOG_IN_SUCCESS',
+      type: LOG_IN_SUCCESS,
       data: action.data
     });
   } catch (err) {
     yield put({
-      type: 'LOG_IN_FAILURE',
-      data: err,
+      type: LOG_IN_FAILURE,
+      error: err,
     });
   }
 }
 
 function* logOut(action: { data: any; }) {
   try {
-    console.log('SAGA LOGOUT');
     yield delay(1000);
     yield put({
       type: 'LOG_OUT_SUCCESS',
@@ -31,23 +33,44 @@ function* logOut(action: { data: any; }) {
   } catch (err) {
     yield put({
       type: 'LOG_OUT_FAILURE',
-      data: err,
+      error: err,
+    });
+  }
+}
+
+function* signUp() {
+  try {
+    yield delay(1000);
+    yield put({
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (err) {
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: err,
     });
   }
 }
 function* watchLogIn() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  yield takeLatest('LOG_IN_REQUEST', logIn);
+  yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
 function* watchLogOut() {
-  yield takeLatest('LOG_OUT_REQUEST', logOut);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* userSaga(): Generator {
   yield all ([
     fork(watchLogIn),
     fork(watchLogOut),
+    fork(watchSignUp),
   ]);
 }

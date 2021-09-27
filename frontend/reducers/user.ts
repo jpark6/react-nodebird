@@ -1,3 +1,10 @@
+export interface MeState {
+  nickname: string,
+  id: number,
+  Posts: Record<string, unknown>[],
+  Followings: {nickname: string}[],
+  Followers: {nickname: string}[],
+}
 interface UserState {
   logInLoading?: boolean,
   logInDone?: boolean,
@@ -5,7 +12,10 @@ interface UserState {
   logOutLoading?: boolean,
   logOutDone?: boolean,
   logOutError?: Record<string, unknown>|null,
-  me ?: Record<string, unknown>|null,
+  signUpLoading?: boolean,
+  signUpDone?: boolean,
+  signUpError?: Record<string, unknown>|null,
+  me ?: MeState|null,
   signUpData?: Record<string, unknown>|null,
   logInData?: Record<string, unknown>|null,
 }
@@ -17,6 +27,9 @@ const initialState: UserState = {
   logOutLoading: false,
   logOutDone: false,
   logOutError: null,
+  signUpLoading: false,
+  signUpDone: false,
+  signUpError: null,
   me : null,
   signUpData: null,
   logInData: null,

@@ -2,19 +2,26 @@ import React, { ChangeEvent, useCallback, useState, useMemo } from 'react';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../components/AppLayout';
-import userInput from '../hooks/userInput';
+import useInput from '../hooks/useInput';
+import { RootState } from '../reducers';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 export default function Signup(): JSX.Element {
-  const [id, onChangeId] = userInput('');
-  const [nickname, onChangeNickname] = userInput('');
-  const [password, onChangePassword] = userInput('');
+  const [email, onChangeEmail] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
+  const [password, onChangePassword] = useInput('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [term, setTerm] = useState(false);
   const [termError, setTermError] = useState(false);
 
+  const dispatch = useDispatch();
+  const { signUpLoading } = useSelector((state: RootState) =>state.user);
+
   const onChangePasswordCheck = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+
     const passwordCheckValue = e.target.value;
     setPasswordCheck(passwordCheckValue);
     setPasswordError(passwordCheckValue !== password);
@@ -30,11 +37,14 @@ export default function Signup(): JSX.Element {
       return;
     }
 
-    console.log(id, password, nickname);
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nickname }
+    });
   }, [password, passwordCheck, term]);
 
   const errorDivStyle = useMemo(()=>({ color: 'red', }), []);
-  const btnWrapperStyle = useMemo(()=>({ color: 'red',}), []);
+  const btnWrapperStyle = useMemo(()=>({ color: 'red', }), []);
 
   const onChangeTerm = useCallback((e: CheckboxChangeEvent) => {
     const termChecked = e.target.checked;
@@ -51,13 +61,14 @@ export default function Signup(): JSX.Element {
         <div>회원가입 페이지</div>
         <Form onFinish={onSubmit}>
           <div>
-            <label htmlFor="user-id">아이디</label>
+            <label htmlFor="user-email">이메일</label>
             <br />
             <Input
-              name="user-id"
-              value={id}
+              name="user-email"
+              type="email"
+              value={email}
               required
-              onChange={onChangeId}
+              onChange={onChangeEmail}
             />
           </div>
           <div>
@@ -107,6 +118,7 @@ export default function Signup(): JSX.Element {
             <Button
               type="primary"
               htmlType="submit"
+              loading={signUpLoading}
             >
               가입하기
             </Button>

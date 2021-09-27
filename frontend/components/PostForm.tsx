@@ -1,13 +1,19 @@
-import React, { ChangeEvent, RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Button, Form, Input } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addPost } from '../reducers/post';
+import { RootState } from '../reducers';
+import useInput from '../hooks/useInput';
 
 export default function PostForm(): JSX.Element {
-  const [text, setText] = useState('');
-  const onChangeText = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  }, [text]);
+  const [text, onChangeText, setText] = useInput('');
+
+  const { imagePaths, addPostDone } = useSelector((state: RootState)=> state.post);
+  useEffect(() => {
+    if (addPostDone) {
+      setText('');
+    }
+  }, [addPostDone]);
   const dispatch = useDispatch();
   const imageInput = useRef<HTMLInputElement>(null);
 
@@ -20,8 +26,7 @@ export default function PostForm(): JSX.Element {
   const formStyle = useMemo(() => ({ margin: '10px 0 20px', }), []);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost);
-    setText('');
+    dispatch(addPost(text));
   }, [text]);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -50,14 +55,12 @@ export default function PostForm(): JSX.Element {
         </Button>
       </div>
       <div>
-{/*
         {imagePaths && imagePaths.map((v: any) => (
           <div key={v} style={{ display: 'inline-block' }}>
             <img src={v} alt="" style={{ width: '200px' }} />
             <Button>제거</Button>
           </div>
         ))}
-*/}
       </div>
     </Form>
   );

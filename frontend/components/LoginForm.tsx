@@ -2,15 +2,15 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginRequestAction } from '../reducers/user';
-import userInput from '../hooks/userInput';
+import { logInRequestAction } from '../reducers/user';
+import useInput from '../hooks/useInput';
 import { RootState } from '../reducers';
 
 export default function LoginForm(): JSX.Element {
   const dispatch = useDispatch();
-  const { isLoggingIn } = useSelector((state: RootState) => state.user);
-  const [id, onChangeId] = userInput('');
-  const [password, onChangePassword] = userInput('');
+  const { logInLoading } = useSelector((state: RootState) => state.user);
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
 
   const btnWrapperStyle = useMemo(()=>({
     marginTop: '10px',
@@ -21,19 +21,19 @@ export default function LoginForm(): JSX.Element {
   }), []);
 
   const onSubmitForm = useCallback(() => {
-    console.log(id, ':', password);
-    dispatch(loginRequestAction({ id, password }));
+    dispatch(logInRequestAction({ email, password }));
 
-  }, [id, password]);
+  }, [email, password]);
   return (
     <Form onFinish={onSubmitForm} style={formStyle}>
       <div>
-        <label htmlFor="user-id">아이디</label>
+        <label htmlFor="user-email">이메일</label>
         <br />
         <Input
-          name="user-id"
-          value={id}
-          onChange={onChangeId}
+          name="user-email"
+          type="email"
+          value={email}
+          onChange={onChangeEmail}
           required
         />
       </div>
@@ -42,13 +42,14 @@ export default function LoginForm(): JSX.Element {
         <br />
         <Input
           name="user-password"
+          type="password"
           value={password}
           onChange={onChangePassword}
           required
         />
       </div>
       <div style={ btnWrapperStyle }>
-        <Button type="primary" htmlType="submit" loading={isLoggingIn}>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
           로그인
         </Button>
         <Link href="/signup">

@@ -1,10 +1,11 @@
 export interface MeState {
   nickname: string,
   id: number,
-  Posts: Record<string, unknown>[],
+  Posts: {nickname: string}[],
   Followings: {nickname: string}[],
   Followers: {nickname: string}[],
 }
+
 interface UserState {
   logInLoading?: boolean,
   logInDone?: boolean,
@@ -18,7 +19,13 @@ interface UserState {
   changeNicknameLoading?: boolean,
   changeNicknameDone?: boolean,
   changeNicknameError?: Record<string, unknown>|null,
-  me ?: MeState|null,
+  me?: {
+    nickname: string,
+    id: number,
+    Posts: {nickname: string}[],
+    Followings: {nickname: string}[],
+    Followers: {nickname: string}[],
+  },
   signUpData?: Record<string, unknown>|null,
   logInData?: Record<string, unknown>|null,
 }
@@ -36,7 +43,6 @@ const initialState: UserState = {
   changeNicknameLoading: false,
   changeNicknameDone: false,
   changeNicknameError: null,
-  me : null,
   signUpData: null,
   logInData: null,
 };
@@ -65,13 +71,16 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
+
 const dummyUser = (data: Record<string, unknown>) => ({
   ...data,
   nickname: 'jpark',
   id: 1,
-  Posts: [],
-  Followings: [],
-  Followers: [],
+  Posts: [{ id: 1 }],
+  Followings: [{ nickname: 'zerocho' }, { nickname: 'dlwlrma' }, { nickname: 'hmson' }],
+  Followers: [{ nickname: 'zerocho' }, { nickname: 'dlwlrma' }, { nickname: 'hmson' }, { nickname: 'messi' }],
 });
 
 export const logInRequestAction = (data: Record<string, unknown>) => ({
@@ -164,6 +173,24 @@ const reducer = (state = initialState, action: {data: Record<string, unknown>, t
         ...state,
         changeNicknameLoading: false,
         changeNicknameError: action.error,
+      };
+    case ADD_POST_TO_ME:
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.data }, ...state.me.Posts],
+        }
+      };
+    case REMOVE_POST_OF_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: state.me.Posts.filter((v) => v.id !== action.data)
+        }
       };
     default:
       return state;

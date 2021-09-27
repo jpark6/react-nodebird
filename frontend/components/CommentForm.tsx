@@ -3,26 +3,9 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
 import { RootState } from '../reducers';
-import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import { ADD_COMMENT_REQUEST, PostState } from '../reducers/post';
 
-interface PostProps {
-  post: {
-    id: number;
-    User: {
-      id: number;
-      nickname: string;
-    };
-    content: string;
-    Images?: {src: string}[];
-    Comments?: {
-      User: {
-        nickname: string;
-      };
-      content: string;
-    }[];
-  }
-}
-export default function CommentForm({ post }: PostProps): JSX.Element {
+export default function CommentForm({ post }: {post: PostState}): JSX.Element {
   const id = useSelector((state: RootState) => state.user.me?.id);
   const { addCommentDone } = useSelector((state: RootState) => state.post);
   const [commentText, onChangeCommentText, setCommentText] = useInput('');

@@ -1,43 +1,34 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Avatar, Button, Card, List, Popover, Comment } from 'antd';
 import { EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ButtonGroup from 'antd/lib/button/button-group';
 import PostImages from './PostImages';
 import { RootState } from '../reducers';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { PostState, REMOVE_POST_REQUEST } from '../reducers/post';
 
-interface PostProps {
-  post: {
-    id: number;
-    User: {
-      id: number;
-      nickname: string;
-    };
-    content: string;
-    Images?: {src: string}[];
-    Comments?: {
-      User: {
-        nickname: string;
-      };
-      content: string;
-    }[];
-  }
-}
-
-export default function PostCard({ post }: PostProps): JSX.Element {
+export default function PostCard({ post }: { post: PostState }): JSX.Element {
   const [liked, setLiked] = useState(false);
   const onToggleLiked = useCallback(()=> {
     setLiked(prev => !prev);
   }, [liked]);
-  const [commentFormOpend, setCommentFormOpend] = useState(false);
+  const [commentFormOpened, setCommentFormOpened] = useState(false);
   const onToggleCommentFormOpened = useCallback(() => {
-    setCommentFormOpend(prev => !prev);
-  }, [commentFormOpend]);
+    setCommentFormOpened(prev => !prev);
+  }, [commentFormOpened]);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const id = useSelector((state: RootState) => state.user.me?.id);
+  const { removePostLoading } = useSelector((state: RootState) => state.post);
+  const dispatch = useDispatch();
+  const onRemovePost = useCallback(() => {
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
 
   const postCardStyle = useMemo(() => ({ marginBottom: 10 }),[]);
   return (
@@ -58,7 +49,7 @@ export default function PostCard({ post }: PostProps): JSX.Element {
                 {id && id === post.User.id ? (
                   <>
                     <Button>수정</Button>
-                    <Button>삭제</Button>
+                    <Button type="ghost" loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
                   </>
                 ) : (
                   <Button>신고</Button>
@@ -76,7 +67,7 @@ export default function PostCard({ post }: PostProps): JSX.Element {
           description={ <PostCardContent postData={post.content} />}
         />
       </Card>
-      { commentFormOpend && (
+      { commentFormOpened && (
         <div>
           <CommentForm post={post} />
           <List

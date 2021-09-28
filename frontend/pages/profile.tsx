@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import AppLayout from '../components/AppLayout';
 import FollowerList from '../components/FollowerList';
 import NicknameEditForm from '../components/NicknameEditForm';
@@ -9,6 +10,13 @@ import { RootState } from '../reducers';
 
 export default function profile(): JSX.Element {
   const { me } = useSelector((state: RootState) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if(!(me && me.id)) {
+      router.push('/').then(r => console.log(r));
+    }
+  }, [me && me.id]);
 
   return (
     <>

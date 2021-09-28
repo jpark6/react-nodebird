@@ -49,7 +49,7 @@ export default function PostCard({ post }: { post: PostState }): JSX.Element {
                 {id && id === post.User.id ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="ghost" loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
+                    <Button danger ghost loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
                   </>
                 ) : (
                   <Button>신고</Button>

@@ -64,7 +64,14 @@ export default function PostCard({ images } : PostImagesProps): JSX.Element {
               src={images[0].src}
               alt={images[0].src}
               onClick={onZoom}
-              width="50%"
+              style={{ width: 'calc(100% / 3)' }}
+            />
+            <img
+              role="presentation"
+              src={images[1].src}
+              alt={images[1].src}
+              onClick={onZoom}
+              style={{ width: 'calc(100% / 3)' }}
             />
             <div
               role="presentation"
@@ -73,7 +80,7 @@ export default function PostCard({ images } : PostImagesProps): JSX.Element {
             >
               <PlusOutlined />
               <br />
-              {images.length -1 } 개의 사진 더 보기
+              {images.length - 2 } 개의 사진 더 보기
             </div>
           </>
         );

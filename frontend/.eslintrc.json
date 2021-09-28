@@ -23,6 +23,7 @@
     "react/jsx-props-no-spreading": ["off"],
     "quotes": [2, "single", "avoid-escape"],
     "jsx-a11y/label-has-associated-control": "off",
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
+    "no-param-reassign": "off"
   }
 }

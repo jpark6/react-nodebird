@@ -13,6 +13,7 @@
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "antd": "^4.16.13",
+    "faker": "^5.5.3",
     "immer": "^9.0.6",
     "next": "^11.1.2",
     "next-redux-wrapper": "^7.0.5",
@@ -28,6 +29,7 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
+    "@types/faker": "^5.5.8",
     "@types/node": "^16.9.1",
     "@types/react": "^17.0.21",
     "@types/react-slick": "^0.23.5",

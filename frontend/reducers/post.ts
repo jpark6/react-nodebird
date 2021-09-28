@@ -1,10 +1,11 @@
 import shortId from 'shortid';
-import produce, { Immutable } from 'immer';
+import faker from 'faker';
+import produce from 'immer';
 
 export interface PostState {
   id: string;
   User: {
-    id: number;
+    id: string|number;
     nickname: string;
   };
   content: string;
@@ -112,6 +113,28 @@ export const initialState: MainPostProps = {
   addCommentError: null,
 };
 
+
+initialState.mainPosts = initialState.mainPosts.concat(
+  Array(100).fill({}).map(() => ({
+    id: shortId.generate(),
+    User: {
+      id: shortId.generate(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.paragraph(),
+    Images: [{
+      id: shortId.generate(),
+      src: faker.image.imageUrl(),
+    }],
+    Comments: [{
+      id: shortId.generate(),
+      User: {
+        nickname: faker.name.findName(),
+      },
+      content: faker.lorem.sentence(),
+    }],
+})),
+);
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';

@@ -1,13 +1,35 @@
-import { all, delay, fork, put, takeLatest } from 'redux-saga/effects';
+import { all, delay, fork, put, takeLatest, throttle } from 'redux-saga/effects';
 import shortId from 'shortid';
 import {
-  ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST,
+  ADD_COMMENT_FAILURE,
+  ADD_COMMENT_REQUEST,
   ADD_COMMENT_SUCCESS,
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
-  ADD_POST_SUCCESS, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS
+  ADD_POST_SUCCESS,
+  generateDummyPost,
+  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+
+function* loadPosts() {
+  try {
+    yield delay(1000);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: generateDummyPost(10),
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      data: err,
+    });
+  }
+}
 
 function* addPost(action: {data: string}) {
   try {
@@ -66,6 +88,12 @@ function* addComment(action: {data: {content: string, postId: string, userId: st
   }
 }
 
+function* watchLoadPosts() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
+}
+
 function* watchAddPost() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -85,6 +113,7 @@ function* watchAddComment() {
 
 export default function* postSaga(): Generator {
   yield all([
+    fork(watchLoadPosts),
     fork(watchAddPost),
     fork(watchRemovePost),
     fork(watchAddComment),

@@ -25,6 +25,10 @@ export interface PostState {
 interface MainPostProps {
   mainPosts: PostState[];
   imagePaths: {src: string}[],
+  hasMorePost: boolean,
+  loadPostsLoading?: boolean;
+  loadPostsDone?: boolean;
+  loadPostsError?: Record<string, unknown>|null;
   addPostLoading?: boolean;
   addPostDone?: boolean;
   addPostError?: Record<string, unknown>|null;
@@ -37,73 +41,8 @@ interface MainPostProps {
 }
 
 export const initialState: MainPostProps = {
-  mainPosts: [{
-    id: shortId.generate(),
-    User: {
-      id: 1,
-      nickname: 'jpark',
-    },
-    content: 'First Post #Hash #express',
-    Images: [{
-      id: shortId.generate(),
-      src:'https://acaroom.net/sites/default/files/styles/blog_featured_adaptive/public/images/blogs/reactintroduction.png',
-    }, {
-      id: shortId.generate(),
-      src: 'https://media.vlpt.us/images/dongha1992/post/d31e5f57-14c8-495e-867b-b5b6cadee525/next.js.png'
-    }, {
-      id: shortId.generate(),
-      src: 'https://media.vlpt.us/images/taeg92/post/a0e7e32b-49ee-4f17-ad61-a89f481521e3/Typescript.jpg'
-    }],
-    Comments: [
-      {
-        id: shortId.generate(),
-        User: {
-          nickname: 'damian',
-        },
-        content: 'Hello World;'
-      },
-      {
-        id: shortId.generate(),
-        User: {
-          nickname: 'TESLA',
-        },
-        content: 'Model S Plaid'
-      },
-    ],
-  },{
-    id: shortId.generate(),
-    User: {
-      id: 1,
-      nickname: 'tomcat',
-    },
-    content: '#cat #cuty #LionOnHouse',
-    Images: [{
-      id: shortId.generate(),
-      src:'https://i.ytimg.com/vi/jHWKtQHXVJg/maxresdefault.jpg',
-    }, {
-      id: shortId.generate(),
-      src: 'https://i.ytimg.com/vi/2AzW2HxN5lE/maxresdefault.jpg'
-    }, {
-      id: shortId.generate(),
-      src: 'https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F6082931ef598a85b055afe77%2Ftwo-month-old-Ragdoll-kitten-at-home%2F960x0.jpg%3FcropX1%3D0%26cropX2%3D3475%26cropY1%3D182%26cropY2%3D2137'
-    }],
-    Comments: [
-      {
-        id: shortId.generate(),
-        User: {
-          nickname: 'dog',
-        },
-        content: 'cuty!!!!'
-      },
-      {
-        id: shortId.generate(),
-        User: {
-           nickname: 'haha',
-         },
-        content: 'haha! hahaha!'
-      },
-    ],
-  }],
+  mainPosts: [],
+  hasMorePost: true,
   imagePaths: [],
   addPostLoading: false,
   addPostDone: false,
@@ -112,10 +51,7 @@ export const initialState: MainPostProps = {
   addCommentDone: false,
   addCommentError: null,
 };
-
-
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(100).fill({}).map(() => ({
+export const generateDummyPost = (number: number) => Array(number).fill({}).map(() => ({
     id: shortId.generate(),
     User: {
       id: shortId.generate(),
@@ -124,7 +60,10 @@ initialState.mainPosts = initialState.mainPosts.concat(
     content: faker.lorem.paragraph(),
     Images: [{
       id: shortId.generate(),
-      src: faker.image.imageUrl(),
+      src: [faker.image.imageUrl(), `t=${shortId.generate()}`].join('?'),
+    },{
+      id: shortId.generate(),
+      src: [faker.image.imageUrl(), `t=${shortId.generate()}`].join('?'),
     }],
     Comments: [{
       id: shortId.generate(),
@@ -133,8 +72,12 @@ initialState.mainPosts = initialState.mainPosts.concat(
       },
       content: faker.lorem.sentence(),
     }],
-})),
-);
+}));
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
+
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -180,6 +123,21 @@ const dummyComment = (data: any) => ({
 const reducer = (state = initialState, action: {type: string, data:any, error: Record<string,unknown>}): MainPostProps => (
   produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;

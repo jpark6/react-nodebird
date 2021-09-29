@@ -1,20 +1,39 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { RootState } from '../reducers';
-import { PostState } from '../reducers/post';
+import { LOAD_POSTS_REQUEST } from '../reducers/post';
 
 
 export default function Index(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const { me } = useSelector((state: RootState) => state.user);
+  const { mainPosts, hasMorePost, loadPostsLoading }  = useSelector((state: RootState) => state.post);
 
-  const mainPosts: PostState[] = useSelector((state: RootState) => state.post.mainPosts);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  const dispatch = useDispatch();
+  useEffect(() => {
+      dispatch({
+        type: LOAD_POSTS_REQUEST,
+      });
+  }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      if(window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+          if(hasMorePost && !loadPostsLoading) {
+          dispatch({
+            type: LOAD_POSTS_REQUEST,
+          });
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [hasMorePost, loadPostsLoading]);
+
   return (
     <AppLayout>
       { me && <PostForm /> }

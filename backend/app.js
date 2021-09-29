@@ -1,11 +1,15 @@
-const http = require('http');
+const express = require('express');
+const postRouter = require('./routes/post');
 
-const port = 3060;
-const server = http.createServer((req, res) => {
-  console.log(req.url, req.method);
-  res.end('hello nodeJS');
+const app = express();
+const port = 4000;
+
+app.get('/', (req, res) => {
+  res.send('Hello Express!');
 });
 
-server.listen(port, () => {
+app.use('/post', postRouter);
+
+app.listen(port, () => {
   console.log(`NodeJs Server Listening on ${port}`);
 });

@@ -8,6 +8,7 @@ import { RootState } from '../reducers';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { PostState, REMOVE_POST_REQUEST } from '../reducers/post';
+import FollowButton from './FollowButton';
 
 export default function PostCard({ post }: { post: PostState }): JSX.Element {
   const [liked, setLiked] = useState(false);
@@ -60,6 +61,7 @@ export default function PostCard({ post }: { post: PostState }): JSX.Element {
             <EllipsisOutlined/>
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0].toUpperCase()}</Avatar>}

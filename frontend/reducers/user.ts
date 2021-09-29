@@ -4,11 +4,17 @@ export interface MeState {
   nickname: string,
   id: number,
   Posts: {id: string}[],
-  Followings: {nickname: string}[],
-  Followers: {nickname: string}[],
+  Followings: {id: string}[],
+  Followers: {id: string}[],
 }
 
 interface UserState {
+  followLoading?: boolean,
+  followDone?: boolean,
+  followError?: Record<string, unknown>|null,
+  unfollowLoading?: boolean,
+  unfollowDone?: boolean,
+  unfollowError?: Record<string, unknown>|null,
   logInLoading?: boolean,
   logInDone?: boolean,
   logInError?: Record<string, unknown>|null,
@@ -25,14 +31,20 @@ interface UserState {
     nickname: string,
     id: number,
     Posts: {id: string}[],
-    Followings: {nickname: string}[],
-    Followers: {nickname: string}[],
+    Followings: {id: string}[],
+    Followers: {id: string}[],
   }|null,
   signUpData?: Record<string, unknown>|null,
   logInData?: Record<string, unknown>|null,
 }
 
 const initialState: UserState = {
+  followLoading: false,
+  followDone: false,
+  followError: null,
+  unfollowLoading: false,
+  unfollowDone: false,
+  unfollowError: null,
   logInLoading: false,
   logInDone: false,
   logInError: null,
@@ -82,8 +94,8 @@ const dummyUser = (data: Record<string, string>) => ({
   nickname: 'jpark',
   id: 1,
   Posts: [{ id: '1' }],
-  Followings: [{ nickname: 'zerocho' }, { nickname: 'dlwlrma' }, { nickname: 'hmson' }],
-  Followers: [{ nickname: 'zerocho' }, { nickname: 'dlwlrma' }, { nickname: 'hmson' }, { nickname: 'messi' }],
+  Followings: [{ id: 'zerocho' }, { id: 'dlwlrma' }, { id: 'hmson' }],
+  Followers: [{ id: 'zerocho' }, { id: 'dlwlrma' }, { id: 'hmson' }, { id: 'messi' }],
 });
 
 export const logInRequestAction = (data: any) => ({
@@ -98,6 +110,36 @@ export const logoutRequestAction = () => ({
 const reducer = ( state = initialState, action: {data: any, type: string, error: Record<string, unknown>}) : UserState => (
   produce(state, (draft) => {
     switch (action.type) {
+      case FOLLOW_REQUEST:
+        draft.followLoading = true;
+        draft.followDone = false;
+        draft.followError = null;
+        break;
+      case FOLLOW_SUCCESS:
+        draft.followLoading = false;
+        draft.followDone = true;
+        draft.me?.Followings.push({ id: action.data });
+        break;
+      case FOLLOW_FAILURE:
+        draft.followDone = false;
+        draft.followError = action.error;
+        break;
+      case UNFOLLOW_REQUEST:
+        draft.unfollowLoading = true;
+        draft.unfollowDone = false;
+        draft.unfollowError = null;
+        break;
+      case UNFOLLOW_SUCCESS:
+        draft.unfollowLoading = false;
+        draft.unfollowDone = true;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        draft.me.Followings = draft.me?.Followings.filter((v) => v.id !== action.data);
+        break;
+      case UNFOLLOW_FAILURE:
+        draft.unfollowDone = false;
+        draft.unfollowError = action.error;
+        break;
       case LOG_IN_REQUEST:
         draft.logInLoading = true;
         draft.logInDone = false;

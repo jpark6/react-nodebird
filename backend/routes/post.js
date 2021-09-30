@@ -1,13 +1,13 @@
-const express = require('express');
+import express from 'express';
 
-const router = express.Router();
+const postRouter = express.Router();
 
-router.post('/', (req, res) => {
+postRouter.post('/', (req, res) => {
   res.json({ id: 1, content: 'hello' });
 });
 
-router.delete('/', (req, res) => {
+postRouter.delete('/', (req, res) => {
   res.json({ id: 1 });
 });
 
-module.exports = router;
+export default postRouter;

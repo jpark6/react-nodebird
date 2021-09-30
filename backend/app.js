@@ -1,13 +1,11 @@
-const express = require('express');
-const postRouter = require('./routes/post');
+import express from 'express';
+import indexRouter from './routes/index.js';
+import postRouter from './routes/post.js';
 
 const app = express();
 const port = 4000;
 
-app.get('/', (req, res) => {
-  res.send('Hello Express!');
-});
-
+app.use('/', indexRouter);
 app.use('/post', postRouter);
 
 app.listen(port, () => {

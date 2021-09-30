@@ -8,7 +8,7 @@ const port = 4000;
 
 db.sequelize.sync()
   .then(() => {
-    console.log("Success DB Connect")
+    console.log("Success DB Connected");
   }).catch((err) => {
     console.log(err);
   });

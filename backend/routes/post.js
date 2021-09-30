@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 
 const postRouter = express.Router();
 
@@ -10,4 +10,4 @@ postRouter.delete('/', (req, res) => {
   res.json({ id: 1 });
 });
 
-export default postRouter;
+module.exports = postRouter;

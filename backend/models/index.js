@@ -1,12 +1,25 @@
-import Sequelize from 'sequelize';
-import config from '../config/config';
+const Sequelize = require('sequelize');
+const comment = require('./comment');
+const hashtag = require('./hashtag');
+const image = require('./image');
+const post = require('./post');
+const user = require('./user');
 
 const env = process.env.NODE_ENV || 'development';
-const configEnv = config[env];
+const config = require('../config/config')[env];
+const db = {};
 
-console.log('config env: '. configEnv);
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-const sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
+db.Comment = comment;
+db.Hashtag = hashtag;
+db.Image = image;
+db.Post = post;
+db.User = user;
+
+Object.keys(db).forEach(modelName => {
+  db[modelName].init(sequelize);
+});
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
@@ -17,4 +30,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export default db;
+module.exports = db;

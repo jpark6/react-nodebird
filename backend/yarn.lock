@@ -2,10 +2,20 @@
 # yarn lockfile v1
 
 
+"@types/geojson@^7946.0.7":
+  version "7946.0.8"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.8.tgz#30744afdb385e2945e22f3b033f897f76b1f12ca"
+  integrity sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==
+
 "@types/node@*":
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.2.tgz#5764ca9aa94470adb4e1185fe2e9f19458992b2e"
   integrity sha512-zCclL4/rx+W5SQTzFs9wyvvyCwoK9QtBpratqz2IYJ3O8Umrn0m3nsTv0wQBk9sRGpvUe9CwPDrQFB10f1FIjQ==
+
+"@types/node@^14.14.28":
+  version "14.17.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.20.tgz#74cc80438fd0467dc4377ee5bbad89a886df3c10"
+  integrity sha512-gI5Sl30tmhXsqkNvopFydP7ASc4c2cLfGNQrVKN3X90ADFWFsPEsotm/8JHSUJQKTHbwowAHtcJPeyVhtKv0TQ==
 
 abbrev@1:
   version "1.1.1"
@@ -191,7 +201,7 @@ decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
-denque@^1.4.1:
+denque@^1.4.1, denque@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/denque/-/denque-1.5.1.tgz#07f670e29c9a78f8faecb2566a1e2c11929c5cbf"
   integrity sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw==
@@ -447,7 +457,7 @@ iconv-lite@0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-iconv-lite@^0.6.2:
+iconv-lite@^0.6.2, iconv-lite@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
   integrity sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==
@@ -566,6 +576,19 @@ lru-queue@^0.1.0:
   dependencies:
     es5-ext "~0.10.2"
 
+mariadb@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/mariadb/-/mariadb-2.5.4.tgz#c66daa35e2768b8c714c758453531c06ae4927f4"
+  integrity sha512-4vQgMRyBIN9EwSQG0vzjR9D8bscPH0dGPJt67qVlOkHSiSm0xUatg1Pft4o1LzORgeOW4PheiY/HBE9bYYmNCA==
+  dependencies:
+    "@types/geojson" "^7946.0.7"
+    "@types/node" "^14.14.28"
+    denque "^1.5.0"
+    iconv-lite "^0.6.3"
+    long "^4.0.0"
+    moment-timezone "^0.5.33"
+    please-upgrade-node "^3.2.0"
+
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -619,7 +642,7 @@ minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-moment-timezone@^0.5.31:
+moment-timezone@^0.5.31, moment-timezone@^0.5.33:
   version "0.5.33"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
   integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
@@ -747,6 +770,13 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
 
+please-upgrade-node@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-3.2.0.tgz#aeddd3f994c933e4ad98b99d9a556efa0e2fe942"
+  integrity sha512-gQR3WpIgNIKwBMVLkpMUeR3e1/E1y42bqDQZfql+kDeXd8COYfM8PQA4X6y7a8u9Ua9FHmsrrmirW2vHs45hWg==
+  dependencies:
+    semver-compare "^1.0.0"
+
 proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
@@ -819,6 +849,11 @@ safe-buffer@5.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
+  integrity sha1-De4hahyUGrN+nvsXiPavxf9VN/w=
 
 semver@^5.6.0:
   version "5.7.1"

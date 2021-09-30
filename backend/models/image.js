@@ -1,15 +1,23 @@
-const imageModel = (sequelize, DataTypes) => {
-  const Image = sequelize.define('Image', { // DB에는 images 테이블 생성됨.
-    src: {
-      type: DataTypes.STRING(200),
-      allowNull: false,
-    },
-  },{
-    charset: 'utf8',
-    collate: 'utf8_general_ci',
-  });
-  Image.associate = (db) => {};
-  return Image;
-}
+const DataTypes = require('sequelize');
+const { Model } = DataTypes;
 
-export default imageModel;
+module.exports = class Image extends Model {
+  static init(sequelize) {
+    return super.init({
+      // id가 기본적으로 들어있다.
+      src: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
+    }, {
+      modelName: 'Image',
+      tableName: 'images',
+      charset: 'utf8',
+      collate: 'utf8_general_ci',
+      sequelize,
+    });
+  }
+  static associate(db) {
+    db.Image.belongsTo(db.Post);
+  }
+};

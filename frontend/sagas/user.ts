@@ -92,7 +92,8 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
-      error: err,
+      // @ts-ignore
+      error: err.response.data,
     });
   }
 }

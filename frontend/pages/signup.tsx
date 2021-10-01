@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState, useMemo } from 'react';
+import React, { ChangeEvent, useCallback, useState, useMemo, useEffect } from 'react';
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -7,6 +7,7 @@ import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 import { RootState } from '../reducers';
 import { SIGN_UP_REQUEST } from '../reducers/user';
+import { useRouter } from 'next/router';
 
 export default function Signup(): JSX.Element {
   const [email, onChangeEmail] = useInput('');
@@ -18,7 +19,20 @@ export default function Signup(): JSX.Element {
   const [termError, setTermError] = useState(false);
 
   const dispatch = useDispatch();
-  const { signUpLoading } = useSelector((state: RootState) =>state.user);
+  const router = useRouter();
+  const { signUpLoading, signUpDone, signUpError } = useSelector((state: RootState) =>state.user);
+
+  useEffect(() => {
+    if(signUpDone) {
+      router.push('/').then(r => console.log('route: ', r));
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if(signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
 
   const onChangePasswordCheck = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 

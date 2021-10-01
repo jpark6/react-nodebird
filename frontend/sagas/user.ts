@@ -11,11 +11,11 @@ import {
   SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
-function axiosRequest(method: string, uri: string) {
+function axiosRequest(method: string, uri: string, data: any) {
   switch(method.toUpperCase()) {
-    case 'GET': return axios.get(uri);
-    case 'POST': return axios.post(uri);
-    default: return axios.get(uri);
+    case 'GET': return axios.get(uri, data);
+    case 'POST': return axios.post(uri, data);
+    default: return axios.get(uri, data);
   }
 }
 function* follow(action: { data: any; }) {
@@ -77,11 +77,15 @@ function* logOut(action: { data: any; }) {
   }
 }
 
-function* signUp() {
+function signUpAPI(data: { email: string, nickname: string, password: string }) {
+  console.log('signInData: ', data);
+  return axios.post('http://localhost:4000/user', data);
+}
+function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {
     // @ts-ignore
-    const result = yield call(axiosRequest('post', 'http://localhost:4000/user'));
-    console.log(result);
+    const result = yield call(axiosRequest,'post', 'http://localhost:4000/user', action.data);
+    // const result = yield call(signUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
@@ -115,6 +119,8 @@ function* watchLogOut() {
 }
 
 function* watchSignUp() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 

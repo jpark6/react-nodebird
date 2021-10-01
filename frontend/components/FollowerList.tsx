@@ -4,7 +4,7 @@ import { StopOutlined } from '@ant-design/icons';
 
 interface FollowerListProps {
   header: string;
-  data: { nickname: string }[]|undefined;
+  data: { id: string }[]|undefined;
 }
 
 export default function FollowerList({ header, data }: FollowerListProps): JSX.Element {
@@ -34,7 +34,7 @@ export default function FollowerList({ header, data }: FollowerListProps): JSX.E
       renderItem={ (item) => (
         <List.Item style={{ marginTop: 20 }}>
           <Card actions={[ <StopOutlined key="stop" /> ]}>
-            <Card.Meta description={ item.nickname }/>
+            <Card.Meta description={ item.id }/>
           </Card>
         </List.Item>
       )}

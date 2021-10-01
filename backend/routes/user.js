@@ -1,9 +1,11 @@
 const express = require('express');
 const db = require('../models');
+const bcrypt = require('bcrypt');
 
 const userRouter = express.Router();
 
 userRouter.post('/', async (req, res, next) => {
+  console.log('be: ', req.body)
   try {
     const exUser = await db.User.findOne({
       where: {

@@ -3,6 +3,7 @@ const indexRouter = require('./routes/index.js');
 const postRouter = require('./routes/post.js');
 const userRouter = require('./routes/user.js');
 const db = require('./models');
+const cors = require('cors');
 
 const app = express();
 const port = 4000;
@@ -12,6 +13,10 @@ db.sequelize.sync()
     console.log("Success DB Connected");
   }).catch(console.error);
 
+app.use(cors({
+  origin: true,
+  credentials: false,
+  }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

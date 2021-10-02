@@ -24,6 +24,8 @@ export default function Signup(): JSX.Element {
 
   useEffect(() => {
     if(signUpDone) {
+      alert('회원가입에 성공했습니다.');
+
       router.push('/').then(r => console.log('route: ', r));
     }
   }, [signUpDone]);

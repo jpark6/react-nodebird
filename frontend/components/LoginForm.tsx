@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,10 +8,15 @@ import { RootState } from '../reducers';
 
 export default function LoginForm(): JSX.Element {
   const dispatch = useDispatch();
-  const { logInLoading } = useSelector((state: RootState) => state.user);
+  const { logInLoading, logInError } = useSelector((state: RootState) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
+  useEffect(() => {
+    if(logInError) {
+
+    }
+  }, [logInError]);
   const btnWrapperStyle = useMemo(()=>({
     marginTop: '10px',
   }), []);

@@ -47,16 +47,21 @@ function* unfollow(action: { data: any; }) {
     });
   }
 }
-function* logIn(action: { data: any; }) {
+
+function* logIn(action: { data: { email: string, password: string, } }) {
   try {
-    yield delay(1000);
+    yield console.log('LOGIN SAGA:',action.data);
+    // @ts-ignore
+    const result = yield call(axiosRequest, 'post', '/user/login', action.data);
+    yield console.log('LOGIN RESULT:', result);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data
+      data: result.data,
     });
   } catch (err) {
     yield put({
       type: LOG_IN_FAILURE,
+      // @ts-ignore
       error: err,
     });
   }
@@ -72,19 +77,19 @@ function* logOut(action: { data: any; }) {
   } catch (err) {
     yield put({
       type: 'LOG_OUT_FAILURE',
-      error: err,
+      // @ts-ignore
+      error: err.response.data,
     });
   }
 }
 
 function signUpAPI(data: { email: string, nickname: string, password: string }) {
-  console.log('signInData: ', data);
-  return axios.post('http://localhost:4000/user', data);
+  return axios.post('/user', data);
 }
 function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {
     // @ts-ignore
-    const result = yield call(axiosRequest,'post', 'http://localhost:4000/user', action.data);
+    const result = yield call(axiosRequest,'post', '/user', action.data);
     // const result = yield call(signUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS,

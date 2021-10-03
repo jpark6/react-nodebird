@@ -1,9 +1,7 @@
 const express = require('express');
+const db = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-
-const { User, Post } = require('../models');
-const  { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const userRouter = express.Router();
 
@@ -11,45 +9,29 @@ const userRouter = express.Router();
  * Login
  * post: /user/login
  */
-userRouter.post('/login', isNotLoggedIn, (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    console.log(err, user, info);
-    if (err) {
-      console.error(err);
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).send(info.message);
-    }
-    if (info) {
-      return res.status(401).send(info.message);
-    }
-    return req.login(user, async (loginErr) => {
-      if (loginErr) {
-        console.error(loginErr);
-        return next(loginErr);
+userRouter.post('/login', (req, res, next) => {
+  passport.authenticate(
+    'local',
+    { session: false },
+    (err, user, info) => {
+      if(err) {
+        console.error(err);
+        next(err);
       }
-      const fullUserWithoutPassword = await User.findOne({
-        where: { id: user.id },
-        attributes: {
-          exclude: ['password']
-        },
-        include: [{
-          model: Post,
-          attributes: ['id'],
-        }, {
-          model: User,
-          as: 'Followings',
-          attributes: ['id'],
-        }, {
-          model: User,
-          as: 'Followers',
-          attributes: ['id'],
-        }]
-      })
-      return res.status(200).json(fullUserWithoutPassword);
-    });
-  })(req, res, next);
+      if(info) {
+        console.log('info reason: ', info)
+        // return res.status(401).send(info);
+      }
+      return req.login(user, async (loginError) => {
+        if(loginError) {
+          console.error(loginError);
+          return next(loginError);
+        }
+        console.log('user: ', user)
+        return res.status(201).json(user);
+      });
+    }
+  )(req, res, next);
 });
 
 /**

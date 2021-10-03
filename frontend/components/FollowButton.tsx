@@ -7,7 +7,7 @@ import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from '../reducers/user';
 
 export default function FollowButton({ post }: { post: PostState })  {
   const { me, followLoading, unfollowLoading } = useSelector((state: RootState) => state.user);
-  const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
+  const isFollowing = me?.Followings?.find((v) => v.id === post.User.id);
 
   const dispatch = useDispatch();
 

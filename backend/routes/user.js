@@ -32,6 +32,13 @@ userRouter.post('/login', (req, res, next) => {
   )(req, res, next);
 });
 
+userRouter.post('/logout', (req, res, next) => {
+  req.logout();
+  req.session = null;
+
+  res.send('ok');
+})
+
 /**
  * SignUp
  * post: /user

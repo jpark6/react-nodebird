@@ -65,12 +65,12 @@ function* logIn(action: { data: { email: string, password: string, } }) {
   }
 }
 
-function* logOut(action: { data: any; }) {
+function* logOut() {
   try {
-    yield delay(1000);
+    // @ts-ignore
+    const result = yield call(axiosRequest, 'post', '/user/logout');
     yield put({
       type: 'LOG_OUT_SUCCESS',
-      data: action.data
     });
   } catch (err) {
     yield put({

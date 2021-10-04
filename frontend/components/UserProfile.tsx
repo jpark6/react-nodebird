@@ -13,7 +13,7 @@ export default function UserProfile(): JSX.Element {
   const { logOutLoading } = useSelector((state: RootState) => state.user);
 
   const onLogout = useCallback(() => {
-    dispatch(logoutRequestAction());
+    confirm("정말 로그아웃하시겠습니까?") && dispatch(logoutRequestAction());
   }, []);
   return (
     <Card

@@ -19,15 +19,13 @@ userRouter.post('/login', (req, res, next) => {
         next(err);
       }
       if(info) {
-        console.log('info reason: ', info)
-        // return res.status(401).send(info);
+        return res.status(401).send(info);
       }
       return req.login(user, async (loginError) => {
         if(loginError) {
           console.error(loginError);
           return next(loginError);
         }
-        console.log('user: ', user)
         return res.status(201).json(user);
       });
     }

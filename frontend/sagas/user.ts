@@ -50,10 +50,8 @@ function* unfollow(action: { data: any; }) {
 
 function* logIn(action: { data: { email: string, password: string, } }) {
   try {
-    yield console.log('LOGIN SAGA:',action.data);
     // @ts-ignore
     const result = yield call(axiosRequest, 'post', '/user/login', action.data);
-    yield console.log('LOGIN RESULT:', result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,

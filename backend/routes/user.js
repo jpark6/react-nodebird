@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../models');
+const { User, Post } = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 
@@ -26,7 +26,23 @@ userRouter.post('/login', (req, res, next) => {
           console.error(loginError);
           return next(loginError);
         }
-        return res.status(201).json(user);
+
+        const fullUserWithoutPassword = await User.findOne({
+          where: { id: user.id },
+          attributes: {
+            exclude: ['password']
+          },
+          include: [{
+            model: Post,
+          },{
+            model: User,
+            as: 'Followings',
+          },{
+            model: User,
+            as: 'Followers',
+          }]
+        })
+        return res.status(201).json(fullUserWithoutPassword);
       });
     }
   )(req, res, next);
@@ -45,7 +61,7 @@ userRouter.post('/logout', (req, res, next) => {
  */
 userRouter.post('/', async (req, res, next) => {
   try {
-    const exUser = await db.User.findOne({
+    const exUser = await User.findOne({
       where: {
         email: req.body.email,
       }

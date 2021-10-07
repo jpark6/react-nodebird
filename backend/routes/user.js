@@ -2,6 +2,7 @@ const express = require('express');
 const { User, Post } = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const userRouter = express.Router();
 
@@ -9,7 +10,7 @@ const userRouter = express.Router();
  * Login
  * post: /user/login
  */
-userRouter.post('/login', (req, res, next) => {
+userRouter.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate(
     'local',
     { session: false },
@@ -49,7 +50,7 @@ userRouter.post('/login', (req, res, next) => {
   )(req, res, next);
 });
 
-userRouter.post('/logout', (req, res, next) => {
+userRouter.post('/logout', isLoggedIn,(req, res, next) => {
   req.logout();
   req.session = null;
 

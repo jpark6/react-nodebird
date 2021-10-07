@@ -14,12 +14,13 @@ userRouter.post('/login', (req, res, next) => {
     'local',
     { session: false },
     (err, user, info) => {
+      console.log('eui: ', err, user, info)
       if(err) {
         console.error(err);
-        next(err);
+        return next(err);
       }
       if(info) {
-        return res.status(401).send(info);
+        return res.status(401).send(info.reason);
       }
       return req.login(user, async (loginError) => {
         if(loginError) {

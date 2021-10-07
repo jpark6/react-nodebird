@@ -57,10 +57,11 @@ function* logIn(action: { data: { email: string, password: string, } }) {
       data: result.data,
     });
   } catch (err) {
+    yield console.log('ERR: ',err);
     yield put({
       type: LOG_IN_FAILURE,
       // @ts-ignore
-      error: err,
+      error: err.response.data,
     });
   }
 }
@@ -68,7 +69,7 @@ function* logIn(action: { data: { email: string, password: string, } }) {
 function* logOut() {
   try {
     // @ts-ignore
-    const result = yield call(axiosRequest, 'post', '/user/logout');
+    yield call(axiosRequest, 'post', '/user/logout');
     yield put({
       type: 'LOG_OUT_SUCCESS',
     });

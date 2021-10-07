@@ -20,7 +20,14 @@ export default function Signup(): JSX.Element {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const { signUpLoading, signUpDone, signUpError } = useSelector((state: RootState) =>state.user);
+  const { me, signUpLoading, signUpDone, signUpError } = useSelector((state: RootState) =>state.user);
+
+
+  useEffect(() => {
+    if(me && me.id) {
+      router.push('/').then(r => console.log(r));
+    }
+  }, [me && me.id]);
 
   useEffect(() => {
     if(signUpDone) {

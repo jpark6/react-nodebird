@@ -52,7 +52,6 @@ function* logIn(action: { data: { email: string, password: string, } }) {
       data: result.data,
     });
   } catch (err) {
-    yield console.log('ERR: ',err);
     yield put({
       type: LOG_IN_FAILURE,
       // @ts-ignore

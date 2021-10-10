@@ -36,18 +36,19 @@ function* loadPosts() {
 function* addPost(action: {data: string}) {
   try {
     // @ts-ignore
-    const result = yield call(axiosRequest, 'post', '/post', action.data)
-    const id = shortId.generate();
+    const result = yield call(
+      axiosRequest,
+      'post',
+      '/post',
+      { content: action.data }
+    );
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: action.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
+      data: result.data.me,
     });
   } catch (err) {
     yield put({
@@ -78,7 +79,13 @@ function* removePost(action: { data: string }) {
 
 function* addComment(action: {data: {content: string, postId: string, userId: string}}) {
   try {
-    yield delay(1000);
+    // @ts-ignore
+    const result = yield call(
+      axiosRequest,
+      'post',
+      `/post/${action.data.postId}/comment`,
+      action.data
+    );
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data

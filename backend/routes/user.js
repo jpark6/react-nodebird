@@ -15,7 +15,6 @@ userRouter.post('/login', isNotLoggedIn, (req, res, next) => {
     'local',
     { session: false },
     (err, user, info) => {
-      console.log('eui: ', err, user, info)
       if(err) {
         console.error(err);
         return next(err);

@@ -6,6 +6,42 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const userRouter = express.Router();
 
+userRouter.get('/', async (req, res, next) => {
+  try {
+    if(req.user) {
+      const user = await User.findOne({
+        where: { id: req.user.id }
+      });
+
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
+        attributes: {
+          exclude: ['password']
+        },
+        include: [{
+          model: Post,
+          attributes: ['id'],
+        },{
+          model: User,
+          as: 'Followings',
+          attributes: ['id'],
+        },{
+          model: User,
+          as: 'Followers',
+          attributes: ['id'],
+        }]
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+})
+
 /**
  * Login
  * post: /user/login
@@ -35,14 +71,17 @@ userRouter.post('/login', isNotLoggedIn, (req, res, next) => {
           },
           include: [{
             model: Post,
+            attributes: ['id'],
           },{
             model: User,
             as: 'Followings',
+            attributes: ['id'],
           },{
             model: User,
             as: 'Followers',
+            attributes: ['id'],
           }]
-        })
+        });
         return res.status(201).json(fullUserWithoutPassword);
       });
     }
@@ -51,9 +90,10 @@ userRouter.post('/login', isNotLoggedIn, (req, res, next) => {
 
 userRouter.post('/logout', isLoggedIn,(req, res, next) => {
   req.logout();
-  req.session = null;
-
-  res.send('ok');
+  req.session.destroy(() => {
+    res.clearCookie('connect.sid');
+    res.send('Logout Success');
+  });
 })
 
 /**

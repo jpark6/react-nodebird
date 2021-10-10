@@ -3,15 +3,34 @@ import axios, { AxiosResponse } from 'axios';
 
 import {
   FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS,
-  LOG_IN_FAILURE,
-  LOG_IN_REQUEST,
-  LOG_IN_SUCCESS,
-  LOG_OUT_REQUEST,
-  SIGN_UP_FAILURE,
-  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
+  LOAD_USER_REQUEST, LOAD_USER_FAILURE, LOAD_USER_SUCCESS,
+  LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS,
+  LOG_OUT_REQUEST, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS,
+  UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
 import { axiosRequest } from './index';
+
+function* loadUser(action: { data: any; }) {
+  try {
+    // @ts-ignore
+    const result = yield call(
+      axiosRequest,
+      'get',
+      '/user',
+      null
+    );
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: err,
+    });
+  }
+}
 
 function* follow(action: { data: any; }) {
   try {
@@ -95,6 +114,11 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
     });
   }
 }
+function* watchLoadUser() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
 function* watchFollow() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -125,6 +149,7 @@ function* watchSignUp() {
 
 export default function* userSaga(): Generator {
   yield all ([
+    fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),
     fork(watchLogIn),

@@ -21,7 +21,6 @@ module.exports = () => {
       console.log(passwordCompare);
 
       if (passwordCompare) {
-        console.log('PW COMPARE');
         return done(null, user);
       }
       return done(null, false, { reason: '비밀번호가 틀렸습니다.' });

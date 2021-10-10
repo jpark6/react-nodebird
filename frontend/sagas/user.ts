@@ -11,13 +11,8 @@ import {
   SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
-function axiosRequest(method: string, uri: string, data: any) {
-  switch(method.toUpperCase()) {
-    case 'GET': return axios.get(uri, data);
-    case 'POST': return axios.post(uri, data);
-    default: return axios.get(uri, data);
-  }
-}
+import { axiosRequest } from './index';
+
 function* follow(action: { data: any; }) {
   try {
     yield delay(1000);

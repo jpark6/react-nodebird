@@ -1,4 +1,4 @@
-import { all, delay, fork, put, takeLatest, throttle } from 'redux-saga/effects';
+import { all, delay, fork, put, takeLatest, call } from 'redux-saga/effects';
 import shortId from 'shortid';
 import {
   ADD_COMMENT_FAILURE,
@@ -15,6 +15,8 @@ import {
   REMOVE_POST_SUCCESS
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+import { axiosRequest } from './index';
+import axios from 'axios';
 
 function* loadPosts() {
   try {
@@ -33,7 +35,8 @@ function* loadPosts() {
 
 function* addPost(action: {data: string}) {
   try {
-    yield delay(1000);
+    // @ts-ignore
+    const result = yield call(axiosRequest, 'post', '/post', action.data)
     const id = shortId.generate();
     yield put({
       type: ADD_POST_SUCCESS,

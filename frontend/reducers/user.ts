@@ -9,6 +9,9 @@ export interface MeState {
 }
 
 interface UserState {
+  loadUserLoading?: boolean,
+  loadUserDone?: boolean,
+  loadUserError?: Record<string, unknown>|null,
   followLoading?: boolean,
   followDone?: boolean,
   followError?: Record<string, unknown>|null,
@@ -62,6 +65,10 @@ const initialState: UserState = {
   me: null,
 };
 
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
@@ -110,6 +117,21 @@ export const logoutRequestAction = () => ({
 const reducer = ( state = initialState, action: {data: any, type: string, error: Record<string, unknown>}) : UserState => (
   produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_USER_REQUEST:
+        draft.loadUserLoading = true;
+        draft.loadUserDone = false;
+        draft.loadUserError = null;
+        break;
+      case LOAD_USER_SUCCESS:
+        console.log("LUS:", action.data);
+        draft.loadUserLoading = false;
+        draft.loadUserDone = true;
+        draft.me = action.data;
+        break;
+      case LOAD_USER_FAILURE:
+        draft.loadUserDone = false;
+        draft.loadUserError = action.error;
+        break;
       case FOLLOW_REQUEST:
         draft.followLoading = true;
         draft.followDone = false;
@@ -148,7 +170,7 @@ const reducer = ( state = initialState, action: {data: any, type: string, error:
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = action.data;
+        draft.me = {Posts:[], Followers:[], Followings: [], ...action.data};
         break;
       case LOG_IN_FAILURE:
         draft.logInDone = false;

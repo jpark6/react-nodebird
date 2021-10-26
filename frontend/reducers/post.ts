@@ -100,26 +100,6 @@ export const addComment = (data: Record<string, unknown>) => ({
   data,
 });
 
-const dummyPost = (data: { id: string, content: string }): PostState => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: 'jpark',
-  },
-  Images: [],
-  Comments: [],
-});
-
-const dummyComment = (data: any) => ({
-  id: shortId.generate(),
-  User: {
-    id: 1,
-    nickname: 'jpark',
-  },
-  content: data,
-});
-
 const reducer = (state = initialState, action: {type: string, data:any, error: Record<string,unknown>}): MainPostProps => (
   produce(state, (draft) => {
     switch (action.type) {
@@ -146,7 +126,7 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
       case ADD_POST_SUCCESS:
           draft.addPostLoading = false;
           draft.addPostDone = true;
-          draft.mainPosts.unshift(dummyPost(action.data));
+          draft.mainPosts.unshift(action.data);
         break;
       case ADD_POST_FAILURE:
           draft.addPostLoading = false;
@@ -174,8 +154,8 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
           draft.addCommentError = null;
           break;
       case ADD_COMMENT_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post?.Comments?.unshift(dummyComment(action.data.content));
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post?.Comments?.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;

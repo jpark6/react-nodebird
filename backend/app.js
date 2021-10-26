@@ -23,8 +23,8 @@ db.sequelize.sync()
 passportConfig();
 
 app.use(cors({
-  origin: true,
-  credentials: false,
+  origin: 'http://localhost:3000',
+  credentials: true,
 }));
 
 app.use(express.json());
@@ -40,7 +40,7 @@ app.use(session({
     httpOnly: true,
     secure: false,
   },
-}));;
+}));
 app.use(passport.initialize());
 app.use(passport.session({
   saveUninitialized: false,

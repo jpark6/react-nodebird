@@ -14,7 +14,7 @@ export default function LoginForm(): JSX.Element {
 
   useEffect(() => {
     if(logInError) {
-
+      alert(logInError);
     }
   }, [logInError]);
   const btnWrapperStyle = useMemo(()=>({

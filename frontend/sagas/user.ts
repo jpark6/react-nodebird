@@ -3,21 +3,35 @@ import axios, { AxiosResponse } from 'axios';
 
 import {
   FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS,
-  LOG_IN_FAILURE,
-  LOG_IN_REQUEST,
-  LOG_IN_SUCCESS,
-  LOG_OUT_REQUEST,
-  SIGN_UP_FAILURE,
-  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
+  LOAD_USER_REQUEST, LOAD_USER_FAILURE, LOAD_USER_SUCCESS,
+  LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS,
+  LOG_OUT_REQUEST, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS,
+  UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
-function axiosRequest(method: string, uri: string, data: any) {
-  switch(method.toUpperCase()) {
-    case 'GET': return axios.get(uri, data);
-    case 'POST': return axios.post(uri, data);
-    default: return axios.get(uri, data);
+import { axiosRequest } from './index';
+
+function* loadUser(action: { data: any; }) {
+  try {
+    // @ts-ignore
+    const result = yield call(
+      axiosRequest,
+      'get',
+      '/user',
+      null
+    );
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: err,
+    });
   }
 }
+
 function* follow(action: { data: any; }) {
   try {
     yield delay(1000);
@@ -50,10 +64,8 @@ function* unfollow(action: { data: any; }) {
 
 function* logIn(action: { data: { email: string, password: string, } }) {
   try {
-    yield console.log('LOGIN SAGA:',action.data);
     // @ts-ignore
     const result = yield call(axiosRequest, 'post', '/user/login', action.data);
-    yield console.log('LOGIN RESULT:', result);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -62,17 +74,17 @@ function* logIn(action: { data: { email: string, password: string, } }) {
     yield put({
       type: LOG_IN_FAILURE,
       // @ts-ignore
-      error: err,
+      error: err.response.data,
     });
   }
 }
 
-function* logOut(action: { data: any; }) {
+function* logOut() {
   try {
-    yield delay(1000);
+    // @ts-ignore
+    yield call(axiosRequest, 'post', '/user/logout');
     yield put({
       type: 'LOG_OUT_SUCCESS',
-      data: action.data
     });
   } catch (err) {
     yield put({
@@ -101,6 +113,11 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
       error: err.response.data,
     });
   }
+}
+function* watchLoadUser() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
 function* watchFollow() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -132,6 +149,7 @@ function* watchSignUp() {
 
 export default function* userSaga(): Generator {
   yield all ([
+    fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),
     fork(watchLogIn),

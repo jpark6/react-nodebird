@@ -13,19 +13,19 @@ export default function UserProfile(): JSX.Element {
   const { logOutLoading } = useSelector((state: RootState) => state.user);
 
   const onLogout = useCallback(() => {
-    dispatch(logoutRequestAction());
+    confirm("정말 로그아웃하시겠습니까?") && dispatch(logoutRequestAction());
   }, []);
   return (
     <Card
       actions={[
-        <div key="twit">트윗<br/>{me.Posts.length}</div>,
-        <div key="followings">팔로잉<br/>{me.Followings.length}</div>,
-        <div key="follower">팔로워<br/>{ me.Followers.length }</div>,
+        <div key="twit">트윗<br/>{me?.Posts?.length}</div>,
+        <div key="followings">팔로잉<br/>{me?.Followings?.length}</div>,
+        <div key="follower">팔로워<br/>{ me?.Followers?.length }</div>,
       ]}
     >
       <Card.Meta
-        avatar={<Avatar>{ me.nickname[0] }</Avatar>}
-        title={ me.nickname }
+        avatar={<Avatar>{ me?.nickname[0] }</Avatar>}
+        title={ me?.nickname }
       />
       <Button onClick={onLogout} loading={logOutLoading}>로그아웃</Button>
     </Card>

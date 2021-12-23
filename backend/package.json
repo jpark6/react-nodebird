@@ -1,0 +1,8 @@
+{
+  "name": "react-nodebird-backend",
+  "version": "1.0.0",
+  "author": "jpark6",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {}
+}

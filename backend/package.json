@@ -4,5 +4,6 @@
   "author": "jpark6",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {}
 }

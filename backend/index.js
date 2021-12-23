@@ -1,12 +1,25 @@
-const http = require('http');
+import express from 'express';
+import postRouter from './routes/post.js';
 
-const server = http.createServer((req, res) => {
-    console.log(req.url, req.method);
-    res.end('Hello Node');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send("hello express");
 });
 
-const callback = () => {
-    console.log('Server started : 3065');
-}
+app.get('/api', (req, res) => {
+  res.json({
+    arr:[
+      { id: 1, name: 'api' },
+      { id: 2, name: 'kong'}
+    ]
+  })
+});
 
-server.listen(3065, callback);
+app.use('/post', postRouter);
+
+const callback = () => {
+  console.log('Server started : 3065');
+};
+
+app.listen(3065, callback);

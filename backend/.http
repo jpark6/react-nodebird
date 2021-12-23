@@ -1,0 +1,8 @@
+GET http://localhost:3065
+###
+GET http://localhost:3065/api
+###
+POST http://localhost:3065/post
+###
+DELETE http://localhost:3065/post
+###

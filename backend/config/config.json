@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "mariadb",
+    "password": "mariadb",
+    "database": "mariadb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "mariadb",
+    "password": "mariadb",
+    "database": "mariadb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "mariadb",
+    "password": "mariadb",
+    "database": "mariadb",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

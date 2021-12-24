@@ -1,7 +1,13 @@
-import express from 'express';
-import postRouter from './routes/post.js';
+const express = require('express');
+const postRouter = require('./routes/post');
+const db = require('./models');
 
 const app = express();
+db.sequelize.sync()
+  .then(() => {
+    console.log('DB Connect Success')
+  })
+  .catch(console.error);
 
 app.get('/', (req, res) => {
   res.send("hello express");

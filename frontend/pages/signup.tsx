@@ -3,11 +3,11 @@ import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 import { RootState } from '../reducers';
 import { SIGN_UP_REQUEST } from '../reducers/user';
-import { useRouter } from 'next/router';
 
 export default function Signup(): JSX.Element {
   const [email, onChangeEmail] = useInput('');

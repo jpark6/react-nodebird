@@ -106,14 +106,14 @@ function* logOut() {
 }
 
 function signUpAPI(data: { email: string, nickname: string, password: string }) {
-  return axios.post('/user', data);
+  return axios.post('http://localhost:4000/user', data, { withCredentials: true });
 }
 function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = yield call(axiosRequest,'post', '/user', action.data);
-    // const result = yield call(signUpAPI, action.data);
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });

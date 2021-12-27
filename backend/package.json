@@ -5,7 +5,12 @@
   "main": "index.js",
   "license": "MIT",
   "type": "commonjs",
-  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
   "dependencies": {
     "express": "^4.17.2",
     "mariadb": "^2.5.5",

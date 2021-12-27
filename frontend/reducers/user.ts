@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import produce from 'immer';
 
 export interface MeState {
@@ -96,20 +97,13 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
-const dummyUser = (data: Record<string, string>) => ({
-  ...data,
-  nickname: 'jpark',
-  id: 1,
-  Posts: [{ id: '1' }],
-  Followings: [{ id: 'zerocho' }, { id: 'dlwlrma' }, { id: 'hmson' }],
-  Followers: [{ id: 'zerocho' }, { id: 'dlwlrma' }, { id: 'hmson' }, { id: 'messi' }],
-});
-
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const logInRequestAction = (data: any) => ({
   type: LOG_IN_REQUEST,
   data,
 });
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const logoutRequestAction = () => ({
   type: LOG_OUT_REQUEST,
 });
@@ -123,7 +117,6 @@ const reducer = ( state = initialState, action: {data: any, type: string, error:
         draft.loadUserError = null;
         break;
       case LOAD_USER_SUCCESS:
-        console.log("LUS:", action.data);
         draft.loadUserLoading = false;
         draft.loadUserDone = true;
         draft.me = action.data;
@@ -170,7 +163,7 @@ const reducer = ( state = initialState, action: {data: any, type: string, error:
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = {Posts:[], Followers:[], Followings: [], ...action.data};
+        draft.me = { Posts:[], Followers:[], Followings: [], ...action.data };
         break;
       case LOG_IN_FAILURE:
         draft.logInDone = false;

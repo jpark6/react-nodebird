@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ export default function LoginForm(): JSX.Element {
 
   useEffect(() => {
     if(logInError) {
+      // eslint-disable-next-line no-alert
       alert(logInError);
     }
   }, [logInError]);

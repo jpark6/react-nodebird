@@ -5,7 +5,7 @@ import { PostState } from '../reducers/post';
 import { RootState } from '../reducers';
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from '../reducers/user';
 
-export default function FollowButton({ post }: { post: PostState })  {
+export default function FollowButton({ post }: { post: PostState }): JSX.Element  {
   const { me, followLoading, unfollowLoading } = useSelector((state: RootState) => state.user);
   const isFollowing = me?.Followings?.find((v) => v.id === post.User.id);
 
@@ -24,6 +24,7 @@ export default function FollowButton({ post }: { post: PostState })  {
       });
     }
   }, [isFollowing]);
+
   return (
     <Button loading={followLoading || unfollowLoading} onClick={onClickButton}>
       { isFollowing ? '언팔로우' : '팔로우' }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { all, delay, fork, put, call, takeLatest } from 'redux-saga/effects';
 import axios, { AxiosResponse } from 'axios';
 
@@ -9,10 +10,13 @@ import {
   UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
+// eslint-disable-next-line import/no-cycle
 import { axiosRequest } from './index';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function* loadUser(action: { data: any; }) {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(
       axiosRequest,
@@ -32,6 +36,7 @@ function* loadUser(action: { data: any; }) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function* follow(action: { data: any; }) {
   try {
     yield delay(1000);
@@ -47,6 +52,7 @@ function* follow(action: { data: any; }) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function* unfollow(action: { data: any; }) {
   try {
     yield delay(1000);
@@ -64,6 +70,7 @@ function* unfollow(action: { data: any; }) {
 
 function* logIn(action: { data: { email: string, password: string, } }) {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(axiosRequest, 'post', '/user/login', action.data);
     yield put({
@@ -73,6 +80,7 @@ function* logIn(action: { data: { email: string, password: string, } }) {
   } catch (err) {
     yield put({
       type: LOG_IN_FAILURE,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       error: err.response.data,
     });
@@ -81,6 +89,7 @@ function* logIn(action: { data: { email: string, password: string, } }) {
 
 function* logOut() {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     yield call(axiosRequest, 'post', '/user/logout');
     yield put({
@@ -89,6 +98,7 @@ function* logOut() {
   } catch (err) {
     yield put({
       type: 'LOG_OUT_FAILURE',
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       error: err.response.data,
     });
@@ -100,6 +110,7 @@ function signUpAPI(data: { email: string, nickname: string, password: string }) 
 }
 function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(axiosRequest,'post', '/user', action.data);
     // const result = yield call(signUpAPI, action.data);
@@ -109,6 +120,7 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       error: err.response.data,
     });

@@ -8,7 +8,7 @@ import useInput from '../hooks/useInput';
 export default function PostForm(): JSX.Element {
   const [text, onChangeText, setText] = useInput('');
 
-  const btnWrapperStyle = useMemo(() => ({marginTop: 5}),[]);
+  const btnWrapperStyle = useMemo(() => ({ marginTop: 5 }),[]);
   const { imagePaths, addPostDone } = useSelector((state: RootState)=> state.post);
   useEffect(() => {
     if (addPostDone) {
@@ -56,9 +56,9 @@ export default function PostForm(): JSX.Element {
         </Button>
       </div>
       <div>
-        {imagePaths && imagePaths.map((v: any) => (
-          <div key={v} style={{ display: 'inline-block' }}>
-            <img src={v} alt="" style={{ width: '200px' }} />
+        {imagePaths && imagePaths.map((v: {src: string } ) => (
+          <div key={v.src} style={{ display: 'inline-block' }}>
+            <img src={v.src} alt="" style={{ width: '200px' }} />
             <Button>제거</Button>
           </div>
         ))}

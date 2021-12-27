@@ -10,7 +10,8 @@ import rootSaga from '../sagas';
 // @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
-  console.log('action: ', action);
+  // eslint-disable-next-line no-console
+  console.log(`action: ${action}`);
   return next(action);
 };
 

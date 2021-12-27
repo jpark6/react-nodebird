@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define('Comment', { // MariaDB posts 테이블 생성
+  const Comment = sequelize.define('Comment', { // MariaDB comments 테이블 생성
     content: {
       type: DataTypes.TEXT,
       arrowNull: false,

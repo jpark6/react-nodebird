@@ -10,7 +10,7 @@ db.sequelize.sync()
   .catch(console.error);
 
 app.get('/', (req, res) => {
-  res.send("hello express");
+  res.send("hello express!");
 });
 
 app.get('/api', (req, res) => {

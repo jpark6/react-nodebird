@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { all, delay, fork, put, takeLatest, call } from 'redux-saga/effects';
-import shortId from 'shortid';
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -15,7 +15,6 @@ import {
   REMOVE_POST_SUCCESS
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
-import { axiosRequest } from './index';
 
 function* loadPosts() {
   try {
@@ -32,15 +31,15 @@ function* loadPosts() {
   }
 }
 
+function addPostAPI(data: string) {
+  return axios.post('/post', { content: data });
+}
+
 function* addPost(action: {data: string}) {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = yield call(
-      axiosRequest,
-      'post',
-      '/post',
-      { content: action.data }
-    );
+    const result = yield call( addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
@@ -76,13 +75,16 @@ function* removePost(action: { data: string }) {
   }
 }
 
+function addCommentAPI(data: {content: string, postId: string, userId: string}) {
+  return axios.post(`/post/${data.postId}/comment`, data);
+}
+
 function* addComment(action: {data: {content: string, postId: string, userId: string}}) {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(
-      axiosRequest,
-      'post',
-      `/post/${action.data.postId}/comment`,
+      addCommentAPI,
       action.data
     );
     yield put({

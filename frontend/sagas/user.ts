@@ -10,19 +10,19 @@ import {
   UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
 } from '../reducers/user';
 
-// eslint-disable-next-line import/no-cycle
-import { axiosRequest } from './index';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function loadUserAPI(data: any) {
+  return axios.get('/user');
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function* loadUser(action: { data: any; }) {
+function* loadUser(action: {data: any}) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(
-      axiosRequest,
-      'get',
-      '/user',
-      null
+      loadUserAPI,
+      action.data
     );
     yield put({
       type: LOAD_USER_SUCCESS,
@@ -68,11 +68,14 @@ function* unfollow(action: { data: any; }) {
   }
 }
 
+function logInAPI(data: { email: string, password: string }) {
+  return axios.post('/user/login', data);
+}
 function* logIn(action: { data: { email: string, password: string, } }) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = yield call(axiosRequest, 'post', '/user/login', action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -106,7 +109,7 @@ function* logOut() {
 }
 
 function signUpAPI(data: { email: string, nickname: string, password: string }) {
-  return axios.post('http://localhost:4000/user', data, { withCredentials: true });
+  return axios.post('/user', data, { withCredentials: true });
 }
 function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {

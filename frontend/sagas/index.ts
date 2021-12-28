@@ -10,14 +10,6 @@ import postSaga from './post';
 axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.withCredentials = true;
 
-export function axiosRequest(method: string, uri: string, data: unknown) : unknown {
-  switch(method.toUpperCase()) {
-    case 'GET': return axios.get(uri);
-    case 'POST': return axios.post(uri, data);
-    default: return axios.get(uri);
-  }
-}
-
 export default function* rootSaga(): Generator {
   yield all([
     fork(userSaga),

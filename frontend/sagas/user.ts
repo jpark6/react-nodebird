@@ -90,11 +90,14 @@ function* logIn(action: { data: { email: string, password: string, } }) {
   }
 }
 
+function logOutAPI() {
+  return axios.post('/user/logout');
+}
 function* logOut() {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    yield call(axiosRequest, 'post', '/user/logout');
+    yield call(logOutAPI);
     yield put({
       type: 'LOG_OUT_SUCCESS',
     });
@@ -116,7 +119,6 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const result = yield call(signUpAPI, action.data);
-    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { all, delay, fork, put, takeLatest, call } from 'redux-saga/effects';
+import axoisRequest from './request';
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -7,7 +8,6 @@ import {
   ADD_POST_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
-  generateDummyPost,
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
@@ -16,12 +16,14 @@ import {
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
-function* loadPosts() {
+function* loadPosts(action: { data: string }) {
   try {
-    yield delay(1000);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = yield call(axoisRequest, '/posts', 'get', action.data);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: generateDummyPost(10),
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -89,7 +91,7 @@ function* addComment(action: {data: {content: string, postId: string, userId: st
     );
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      data: action.data
+      data: result.data
     });
   } catch (err) {
     yield put({

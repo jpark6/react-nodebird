@@ -5,7 +5,7 @@ import ImagesZoom from './ImagesZoom';
 interface PostImagesProps {
   images: {src: string}[];
 }
-export default function PostCard({ images } : PostImagesProps): JSX.Element {
+export default function PostImage({ images } : PostImagesProps): JSX.Element {
   const [showImageZoom, setShowImageZoom] = useState(false);
   const showMoreDivStyle = useMemo(() => ({
     display: 'inline-block',

@@ -1,5 +1,3 @@
-import shortId from 'shortid';
-import faker from 'faker';
 import produce from 'immer';
 
 export interface PostState {
@@ -51,28 +49,6 @@ export const initialState: MainPostProps = {
   addCommentDone: false,
   addCommentError: null,
 };
-export const generateDummyPost = (number: number) => Array(number).fill({}).map(() => ({
-    id: shortId.generate(),
-    User: {
-      id: shortId.generate(),
-      nickname: faker.name.findName(),
-    },
-    content: faker.lorem.paragraph(),
-    Images: [{
-      id: shortId.generate(),
-      src: [faker.image.imageUrl(), `t=${shortId.generate()}`].join('?'),
-    },{
-      id: shortId.generate(),
-      src: [faker.image.imageUrl(), `t=${shortId.generate()}`].join('?'),
-    }],
-    Comments: [{
-      id: shortId.generate(),
-      User: {
-        nickname: faker.name.findName(),
-      },
-      content: faker.lorem.sentence(),
-    }],
-}));
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
@@ -90,12 +66,12 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-export const addPost = (data: string) => ({
+export const addPost = (data: string): { type: string, data: unknown } => ({
   type: ADD_POST_REQUEST,
   data,
 });
 
-export const addComment = (data: Record<string, unknown>) => ({
+export const addComment = (data: Record<string, unknown>): { type: string, data: unknown }  => ({
   type: ADD_COMMENT_REQUEST,
   data,
 });
@@ -111,7 +87,7 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
       case LOAD_POSTS_SUCCESS:
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
-        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.mainPosts = action.data.concat(draft.mainPosts);
         draft.hasMorePost = draft.mainPosts.length < 50;
         break;
       case LOAD_POSTS_FAILURE:

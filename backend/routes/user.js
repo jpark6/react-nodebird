@@ -6,6 +6,27 @@ const { User, Post } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
+router.post('/', isNotLoggedIn, async (req, res, next) => {
+  const exUser = await User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  });
+
+  if(exUser) {
+    return res.status(403).send('email is already used.');
+  }
+  const { email, nickname, password } = req.body;
+  console.log(email, nickname, password);
+  const hashedPassword = await bcrypt.hash(req.body.password, 13);
+  await User.create({
+    email,
+    nickname,
+    password: hashedPassword
+  });
+
+  return res.status(201).send('user created');
+})
 router.get('/', async (req, res, next) => { // get /user/
   try {
     if(req.user) {

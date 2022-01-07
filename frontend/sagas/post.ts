@@ -11,8 +11,15 @@ import {
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
+  REMOVE_POST_FAILURE,
   REMOVE_POST_REQUEST,
-  REMOVE_POST_SUCCESS
+  REMOVE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  LIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
+  UNLIKE_POST_SUCCESS,
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
@@ -71,7 +78,7 @@ function* removePost(action: { data: string }) {
     });
   } catch (err) {
     yield put({
-      type: ADD_POST_FAILURE,
+      type: REMOVE_POST_FAILURE,
       data: err,
     });
   }
@@ -101,6 +108,54 @@ function* addComment(action: {data: {content: string, postId: string, userId: st
   }
 }
 
+function likePostAPI(data: {content: string, postId: string, userId: string}) {
+  return axios.patch(`/post/${data}/like`);
+}
+
+function* likePost(action: {data: {content: string, postId: string, userId: string}}) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = yield call(
+      likePostAPI,
+      action.data
+    );
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: LIKE_POST_FAILURE,
+      data: err,
+    });
+  }
+}
+
+function unlikePostAPI(data: {content: string, postId: string, userId: string}) {
+  return axios.delete(`/post/${data}/like`);
+}
+
+function* unlikePost(action: {data: {content: string, postId: string, userId: string}}) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = yield call(
+      unlikePostAPI,
+      action.data
+    );
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      data: err,
+    });
+  }
+}
+
 function* watchLoadPosts() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -118,18 +173,32 @@ function* watchRemovePost() {
   // @ts-ignore
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
+
 function* watchAddComment() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function* watchLikePost() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+function* watchUnlikePost() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
+}
 export default function* postSaga(): Generator {
   yield all([
     fork(watchLoadPosts),
     fork(watchAddPost),
     fork(watchRemovePost),
     fork(watchAddComment),
+    fork(watchLikePost),
+    fork(watchUnlikePost),
   ]);
 }
 

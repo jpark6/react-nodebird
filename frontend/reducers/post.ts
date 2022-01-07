@@ -18,6 +18,9 @@ export interface PostState {
     };
     content: string;
   }[];
+  Likers?: {
+    id: string
+  }[];
 }
 
 interface MainPostProps {
@@ -36,6 +39,12 @@ interface MainPostProps {
   addCommentLoading?: boolean;
   addCommentDone?: boolean;
   addCommentError?: Record<string, unknown>|null;
+  likePostLoading?: boolean;
+  likePostDone?: boolean;
+  likePostError?: Record<string, unknown>|null;
+  unlikePostLoading?: boolean;
+  unlikePostDone?: boolean;
+  unlikePostError?: Record<string, unknown>|null;
 }
 
 export const initialState: MainPostProps = {
@@ -48,6 +57,12 @@ export const initialState: MainPostProps = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+  unlikePostLoading: false,
+  unlikePostDone: false,
+  unlikePostError: null,
 };
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
@@ -65,6 +80,14 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
 export const addPost = (data: string): { type: string, data: unknown } => ({
   type: ADD_POST_REQUEST,
@@ -139,6 +162,40 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
+        break;
+      case LIKE_POST_REQUEST:
+        draft.likePostLoading = true;
+        draft.likePostDone = false;
+        draft.likePostError = null;
+        break;
+      case LIKE_POST_SUCCESS: {
+        draft.likePostLoading = false;
+        draft.likePostDone = true;
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post?.Likers?.push({ id: action.data.UserId });
+        break;
+      }
+      case LIKE_POST_FAILURE:
+        draft.likePostLoading = false;
+        draft.likePostError = action.error;
+        break;
+      case UNLIKE_POST_REQUEST:
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS: {
+        draft.unlikePostLoading = false;
+        draft.unlikePostDone = true;
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        if(post && post.Likers){
+          post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
+        }
+        break;
+      }
+      case UNLIKE_POST_FAILURE:
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
         break;
       default:
         break;

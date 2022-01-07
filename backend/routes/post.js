@@ -55,6 +55,46 @@ router.post('/:postId/comment', isLoggedIn, async (req, res) => {
   };
 });
 
+router.patch('/:postId/like', async (res, req, next) => { // PATCH /post/1/like
+  try {
+    const post = await Post.findOne({
+      where: {
+        id: req.params.postId
+      }
+    });
+
+    if(!post) {
+      return res.status(403).send('post not exist')
+    }
+
+    await post.addLikers(req.user.id);
+    res.json({ PostId: post.id, UserId: req.user.id });
+
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/:postId/like', async (res, req, next) => { // DELETE /post/1/like
+  try {
+    const post = await Post.findOne({
+      where: {
+        id: req.params.postId
+      }
+    });
+
+    if(!post) {
+      return res.status(403).send('post not exist')
+    }
+
+    await post.removeLikers(req.user.id);
+    res.json({ PostId: post.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 router.delete('/', (req, res) => {
   res.json({
     id: 1

@@ -7,14 +7,25 @@ import PostImages from './PostImages';
 import { RootState } from '../reducers';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import { PostState, REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, PostState, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 
 export default function PostCard({ post }: { post: PostState }): JSX.Element {
-  const [liked, setLiked] = useState(false);
-  const onToggleLiked = useCallback(()=> {
-    setLiked(prev => !prev);
-  }, [liked]);
+
+  const onLike = useCallback(()=> {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
+  const onUnlike = useCallback(()=> {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const onToggleCommentFormOpened = useCallback(() => {
     setCommentFormOpened(prev => !prev);
@@ -22,6 +33,7 @@ export default function PostCard({ post }: { post: PostState }): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const id = useSelector((state: RootState) => state.user.me?.id);
+  const liked = post?.Likers?.find((v) => v.id === String(id));
   const { removePostLoading } = useSelector((state: RootState) => state.post);
   const dispatch = useDispatch();
   const onRemovePost = useCallback(() => {
@@ -39,8 +51,8 @@ export default function PostCard({ post }: { post: PostState }): JSX.Element {
         actions={[
           <RetweetOutlined key="retweet"/>,
             liked
-            ? <HeartTwoTone key="heart_yes" twoToneColor="#eb2f96" onClick={onToggleLiked} />
-            : <HeartOutlined key="heart_no" style={{ color: 'rgba(0, 0, 0, 0.45)' }} onClick={onToggleLiked} />
+            ? <HeartTwoTone key="heart_yes" twoToneColor="#eb2f96" onClick={onUnlike} />
+            : <HeartOutlined key="heart_no" style={{ color: 'rgba(0, 0, 0, 0.45)' }} onClick={onLike} />
           ,
           <MessageOutlined key="comment" onClick={onToggleCommentFormOpened} />,
           <Popover

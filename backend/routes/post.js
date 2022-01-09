@@ -16,8 +16,17 @@ router.post('/', isLoggedIn, async (req, res) => {
         model: Image,
       }, {
         model: Comment,
+        include: [{
+          model: User, // 댓글 작성자
+          attributes: ['id', 'nickname'],
+        }]
       }, {
-        model: User,
+        model: User, // 게시글 작성자
+        attributes: ['id', 'nickname'],
+      }, {
+        model: User, // 좋아요 작성자
+        as: 'Likers',
+        attributes: ['id'],
       }]
     })
     return res.status(201).json(fullPost);
@@ -55,7 +64,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res) => {
   };
 });
 
-router.patch('/:postId/like', async (res, req, next) => { // PATCH /post/1/like
+router.patch('/:postId/like', async (req, res, next) => { // PATCH /post/1/like
   try {
     const post = await Post.findOne({
       where: {
@@ -76,7 +85,7 @@ router.patch('/:postId/like', async (res, req, next) => { // PATCH /post/1/like
   }
 });
 
-router.delete('/:postId/like', async (res, req, next) => { // DELETE /post/1/like
+router.delete('/:postId/like', async (req, res, next) => { // DELETE /post/1/like
   try {
     const post = await Post.findOne({
       where: {
@@ -85,7 +94,7 @@ router.delete('/:postId/like', async (res, req, next) => { // DELETE /post/1/lik
     });
 
     if(!post) {
-      return res.status(403).send('post not exist')
+      return res.status(403).send('post not exist');
     }
 
     await post.removeLikers(req.user.id);

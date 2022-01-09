@@ -33,7 +33,7 @@ export default function PostCard({ post }: { post: PostState }): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const id = useSelector((state: RootState) => state.user.me?.id);
-  const liked = post?.Likers?.find((v) => v.id === String(id));
+  const liked = post?.Likers?.find((v) => String(v.id) === String(id));
   const { removePostLoading } = useSelector((state: RootState) => state.post);
   const dispatch = useDispatch();
   const onRemovePost = useCallback(() => {

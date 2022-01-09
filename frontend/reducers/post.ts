@@ -172,7 +172,13 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
         draft.likePostLoading = false;
         draft.likePostDone = true;
         const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-        post?.Likers?.push({ id: action.data.UserId });
+        if(post) {
+          if(post.Likers) {
+            post.Likers.push({ id: action.data.UserId });
+          } else {
+            post.Likers = [{ id: action.data.UserId }];
+          }
+        }
         break;
       }
       case LIKE_POST_FAILURE:

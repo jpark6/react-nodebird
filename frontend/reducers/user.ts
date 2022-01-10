@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import produce from 'immer';
+import { DRAFTABLE } from 'immer/dist/internal';
 
 export interface MeState {
   nickname: string,
@@ -34,9 +35,9 @@ interface UserState {
   me: {
     nickname: string,
     id: number,
-    Posts: {id: string}[],
-    Followings: {id: string}[],
-    Followers: {id: string}[],
+    Posts: {id: number}[],
+    Followings: {id: number}[],
+    Followers: {id: number}[],
   }|null,
   signUpData?: Record<string, unknown>|null,
   logInData?: Record<string, unknown>|null,
@@ -204,9 +205,11 @@ const reducer = ( state = initialState, action: {data: any, type: string, error:
         draft.changeNicknameError = null;
         break;
       case CHANGE_NICKNAME_SUCCESS:
+        if(draft.me) {
+          draft.me.nickname = String(action.data.nickname);
+        }
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
-        draft.me = null;
         break;
       case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = false;

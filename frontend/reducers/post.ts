@@ -3,7 +3,7 @@ import produce from 'immer';
 export interface PostState {
   id: string;
   User: {
-    id: string|number;
+    id: number;
     nickname: string;
   };
   content: string;
@@ -138,7 +138,7 @@ const reducer = (state = initialState, action: {type: string, data:any, error: R
           break;
       case REMOVE_POST_SUCCESS:
           draft.mainPosts = draft.mainPosts.filter(
-            (v) => v.id !== action.data
+            (v) => v.id !== action.data.PostId
           );
           draft.removePostLoading = false;
           draft.removePostDone = true;

@@ -11,7 +11,7 @@ import rootSaga from '../sagas';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
   // eslint-disable-next-line no-console
-  console.log(`action: ${action}`);
+  console.log(`action: ${action.data}`);
   return next(action);
 };
 

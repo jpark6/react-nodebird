@@ -7,7 +7,8 @@ import {
   LOAD_USER_REQUEST, LOAD_USER_FAILURE, LOAD_USER_SUCCESS,
   LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS,
   LOG_OUT_REQUEST, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS,
-  UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS
+  UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS,
+  CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
 } from '../reducers/user';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,6 +115,7 @@ function* logOut() {
 function signUpAPI(data: { email: string, nickname: string, password: string }) {
   return axios.post('/user', data, { withCredentials: true });
 }
+
 function* signUp(action: {data:{ email: string, nickname: string, password: string }}) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -131,6 +133,30 @@ function* signUp(action: {data:{ email: string, nickname: string, password: stri
     });
   }
 }
+
+function changeNicknameAPI(data: string ) {
+  return axios.patch('/user/nickname', { nickname: data });
+}
+
+function* changeNickname(action: { data: string }) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = yield call(changeNicknameAPI, action.data);
+    yield put({
+      type: CHANGE_NICKNAME_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: CHANGE_NICKNAME_FAILURE,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLoadUser() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -164,6 +190,12 @@ function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
+function* watchChangeNickname() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
+}
+
 export default function* userSaga(): Generator {
   yield all ([
     fork(watchLoadUser),
@@ -172,5 +204,6 @@ export default function* userSaga(): Generator {
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchSignUp),
+    fork(watchChangeNickname),
   ]);
 }

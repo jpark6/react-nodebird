@@ -25,6 +25,10 @@ export default function FollowButton({ post }: { post: PostState }): JSX.Element
     }
   }, [isFollowing]);
 
+  if(post.User.id === me?.id) {
+    return (<></>);
+  }
+  
   return (
     <Button loading={followLoading || unfollowLoading} onClick={onClickButton}>
       { isFollowing ? '언팔로우' : '팔로우' }

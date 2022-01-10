@@ -4,7 +4,7 @@ import { StopOutlined } from '@ant-design/icons';
 
 interface FollowerListProps {
   header: string;
-  data: { id: string }[]|undefined;
+  data: { id: number }[]|undefined;
 }
 
 export default function FollowerList({ header, data }: FollowerListProps): JSX.Element {

@@ -65,12 +65,18 @@ function* addPost(action: {data: string}) {
   }
 }
 
+function removePostAPI(data: string) {
+  return axios.delete(`/post/${data}`);
+}
+
 function* removePost(action: { data: string }) {
   try {
-    yield delay(1000);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const result = yield call(removePostAPI, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
     yield put({
       type: REMOVE_POST_OF_ME,

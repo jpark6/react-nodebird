@@ -23,11 +23,14 @@ import {
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
+function loadPostAPI(lastId: string) {
+  return axios.get(`/posts?lastId=${lastId || 0}&limit=`);
+}
 function* loadPosts(action: { data: string }) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const result = yield call(axoisRequest, '/posts', 'get', action.data);
+    const result = yield call(loadPostAPI, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,
